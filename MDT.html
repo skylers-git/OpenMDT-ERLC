@@ -1050,10 +1050,341 @@
     letter-spacing: 2px;
   }
 
+  /* ── LOGIN OVERLAY ────────────────────────── */
+  #login-overlay {
+    position: fixed;
+    inset: 0;
+    background: #010305;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,180,255,0.012) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,180,255,0.012) 40px);
+  }
+
+  #login-overlay.hidden { display: none; }
+
+  .login-top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--cyber), transparent);
+    opacity: 0.6;
+  }
+
+  .login-box {
+    width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    animation: loginFadeIn 0.6s ease forwards;
+  }
+
+  @keyframes loginFadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Department seal */
+  .dept-seal {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .seal-ring-outer {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    border: 2px solid var(--cyber-dim);
+    position: absolute;
+    top: 0; left: 0;
+    box-shadow: 0 0 18px rgba(0,180,255,0.2), inset 0 0 18px rgba(0,180,255,0.06);
+    animation: sealSpin 30s linear infinite;
+  }
+
+  .seal-ring-inner {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,180,255,0.3);
+    position: absolute;
+    top: 13px; left: 13px;
+    background: rgba(0,180,255,0.04);
+  }
+
+  .seal-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .seal-star { font-size: 32px; line-height: 1; display: block; }
+
+  .seal-text-ring {
+    position: absolute;
+    top: 0; left: 0;
+    width: 110px; height: 110px;
+  }
+
+  @keyframes sealSpin { to { transform: rotate(360deg); } }
+
+  .login-agency {
+    font-family: var(--font-ui);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: var(--cyber);
+    text-shadow: 0 0 20px rgba(0,180,255,0.4);
+    margin-bottom: 4px;
+    text-align: center;
+  }
+
+  .login-sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .login-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyber-dim), transparent);
+    margin: 18px 0;
+    opacity: 0.5;
+  }
+
+  .login-system-label {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .login-field label {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--text-secondary);
+  }
+
+  .login-field input {
+    background: rgba(0,180,255,0.04);
+    border: 1px solid var(--border-bright);
+    border-radius: 2px;
+    color: var(--cyber);
+    font-family: var(--font-mono);
+    font-size: 15px;
+    padding: 11px 14px;
+    outline: none;
+    letter-spacing: 2px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+  }
+
+  .login-field input::placeholder { color: var(--text-dim); font-size: 12px; letter-spacing: 1px; }
+
+  .login-field input:focus {
+    border-color: var(--cyber);
+    box-shadow: 0 0 0 2px rgba(0,180,255,0.12), 0 0 14px rgba(0,180,255,0.08);
+  }
+
+  .login-btn {
+    margin-top: 6px;
+    width: 100%;
+    padding: 13px;
+    background: rgba(0,180,255,0.08);
+    border: 1px solid var(--cyber);
+    border-radius: 2px;
+    color: var(--cyber);
+    font-family: var(--font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .login-btn:hover {
+    background: rgba(0,180,255,0.16);
+    box-shadow: 0 0 24px rgba(0,180,255,0.25);
+  }
+
+  .login-btn:active { transform: scale(0.99); }
+
+  .login-btn::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    transition: left 0.4s;
+  }
+
+  .login-btn:hover::after { left: 150%; }
+
+  .login-error {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-red);
+    text-align: center;
+    letter-spacing: 1px;
+    min-height: 16px;
+  }
+
+  .login-footer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 14px 20px;
+    background: rgba(255,59,92,0.04);
+    border-top: 1px solid rgba(255,59,92,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .login-footer-icon { font-size: 14px; opacity: 0.6; }
+
+  .login-footer-text {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: rgba(255,59,92,0.7);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .login-session-info {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 18px;
+    letter-spacing: 1px;
+    line-height: 1.8;
+  }
+
+  /* sign-off button in topbar */
+  .btn-signoff {
+    background: none;
+    border: 1px solid rgba(255,59,92,0.3);
+    border-radius: 2px;
+    color: rgba(255,59,92,0.7);
+    font-family: var(--font-ui);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 3px 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-signoff:hover { border-color: var(--accent-red); color: var(--accent-red); background: rgba(255,59,92,0.08); }
+
+  .topbar-officer-block { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+
   .empty-state .empty-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
 </style>
 </head>
 <body>
+
+<!-- ══ LOGIN OVERLAY ══════════════════════════════════════════ -->
+<div id="login-overlay">
+  <div class="login-top-bar"></div>
+
+  <div class="login-box">
+
+    <!-- Dept Seal -->
+    <div class="dept-seal">
+      <div class="seal-ring-outer"></div>
+      <div class="seal-ring-inner"></div>
+      <svg class="seal-text-ring" viewBox="0 0 110 110">
+        <defs>
+          <path id="seal-arc-top" d="M 55,55 m -38,0 a 38,38 0 1,1 76,0" />
+          <path id="seal-arc-bot" d="M 55,55 m -34,0 a 34,34 0 0,0 68,0" />
+        </defs>
+        <text font-family="'Rajdhani',sans-serif" font-size="7.5" font-weight="700" fill="#006899" letter-spacing="2.8">
+          <textPath href="#seal-arc-top">RIVER CITY POLICE DEPARTMENT</textPath>
+        </text>
+        <text font-family="'Rajdhani',sans-serif" font-size="7" font-weight="600" fill="#006899" letter-spacing="2">
+          <textPath href="#seal-arc-bot" startOffset="14%">EST. 1987 · LIBERTY CO.</textPath>
+        </text>
+      </svg>
+      <div class="seal-center">
+        <span class="seal-star">⭐</span>
+      </div>
+    </div>
+
+    <div class="login-agency">METRO PD</div>
+    <div class="login-sub">RIVER CITY POLICE DEPARTMENT</div>
+    <div class="login-sub" style="font-size:8px;letter-spacing:6px;margin-top:2px;color:var(--text-dim);">LIBERTY COUNTY · INDIANA</div>
+
+    <div class="login-divider"></div>
+
+    <div class="login-system-label">◆ SECURE MDT ACCESS — OFFICER SIGN-ON ◆</div>
+
+    <div class="login-form">
+      <div class="login-field">
+        <label>OFFICER NAME</label>
+        <input type="text" id="login-name" placeholder="e.g. SGT. R. MILLER" autocomplete="off" onkeydown="if(event.key==='Enter')document.getElementById('login-callsign').focus()">
+      </div>
+      <div class="login-field">
+        <label>UNIT / CALLSIGN</label>
+        <input type="text" id="login-callsign" placeholder="e.g. 4-ADAM-12" autocomplete="off" style="text-transform:uppercase;" onkeydown="if(event.key==='Enter')signOn()">
+      </div>
+      <div class="login-error" id="login-error"></div>
+      <button class="login-btn" onclick="signOn()">▶ &nbsp; SIGN ON DUTY</button>
+    </div>
+
+    <div class="login-session-info">
+      SESSION ENCRYPTED · AES-256 · NCIC COMPLIANT<br>
+      ALL ACTIVITY IS LOGGED AND MONITORED
+    </div>
+
+  </div>
+
+  <!-- Warning footer -->
+  <div class="login-footer">
+    <span class="login-footer-icon">🔒</span>
+    <div class="login-footer-text">
+      WARNING — UNAUTHORIZED ACCESS TO THIS SYSTEM IS PROHIBITED UNDER 18 U.S.C. § 1030<br>
+      FOR AUTHORIZED LAW ENFORCEMENT PERSONNEL ONLY · VIOLATIONS WILL BE PROSECUTED
+    </div>
+    <span class="login-footer-icon">🔒</span>
+  </div>
+</div>
+<!-- ══ END LOGIN OVERLAY ══════════════════════════════════════ -->
 
 <!-- TOP BAR -->
 <div id="topbar">
@@ -1078,8 +1409,9 @@
   </div>
 
   <div class="topbar-right">
-    <div>
-      <div class="unit-id">UNIT 4-ADAM-12 &nbsp;|&nbsp; SGT. R. MILLER</div>
+    <div class="topbar-officer-block">
+      <div class="unit-id" id="topbar-officer-display">UNIT — &nbsp;|&nbsp; —</div>
+      <button class="btn-signoff" onclick="signOff()">◼ SIGN OFF</button>
     </div>
     <div class="divider-v"></div>
     <div id="clock">00:00:00</div>
@@ -1113,7 +1445,7 @@
       <span class="nav-icon">🗄️</span> DATABASE
     </button>
 
-    <div class="nav-footer">
+    <div class="nav-footer" id="nav-footer-session">
       SYS v4.2.1<br>
       ENCRYPTED<br>
       SHIFT: DAY
@@ -1220,7 +1552,7 @@
           </div>
           <div class="form-group">
             <label>REPORTING OFFICER</label>
-            <input type="text" id="inc-officer" value="4-ADAM-12 | SGT. R. MILLER">
+            <div id="inc-officer" style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:8px 10px;font-family:var(--font-mono);font-size:13px;color:var(--cyber);letter-spacing:1px;opacity:0.8;">—</div>
           </div>
         </div>
       </div>
@@ -1587,7 +1919,7 @@
           <div class="form-section-header"><span class="section-icon">⚖️</span><div class="form-section-title">AFFIANT &amp; CASE INFORMATION</div></div>
           <div class="form-section-body">
             <div class="form-grid cols-3">
-              <div class="form-group"><label>AFFIANT (OFFICER NAME / BADGE)</label><input type="text" id="pca-affiant" placeholder="SGT. R. MILLER | BADGE 412" value="4-ADAM-12 | SGT. R. MILLER"></div>
+              <div class="form-group"><label>AFFIANT (OFFICER NAME / BADGE)</label><div id="pca-affiant" style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:8px 10px;font-family:var(--font-mono);font-size:13px;color:var(--cyber);letter-spacing:1px;opacity:0.8;">—</div></div>
               <div class="form-group"><label>AGENCY</label><input type="text" id="pca-agency" placeholder="RIVER CITY POLICE DEPT" value="RIVER CITY POLICE DEPT"></div>
               <div class="form-group"><label>RELATED CAD / CASE #</label><input type="text" id="pca-caseno" placeholder="CAD-XXXX or INC-XXXXXX"></div>
               <div class="form-group"><label>DEFENDANT NAME</label><input type="text" id="pca-defendant" placeholder="LAST, FIRST MI"></div>
@@ -1627,7 +1959,7 @@
           <div class="form-section-header"><span class="section-icon">🔍</span><div class="form-section-title">WARRANT INFORMATION</div></div>
           <div class="form-section-body">
             <div class="form-grid cols-3">
-              <div class="form-group"><label>AFFIANT (OFFICER NAME / BADGE)</label><input type="text" id="sw-affiant" value="4-ADAM-12 | SGT. R. MILLER"></div>
+              <div class="form-group"><label>AFFIANT (OFFICER NAME / BADGE)</label><div id="sw-affiant" style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:8px 10px;font-family:var(--font-mono);font-size:13px;color:var(--cyber);letter-spacing:1px;opacity:0.8;">—</div></div>
               <div class="form-group"><label>AGENCY</label><input type="text" id="sw-agency" value="RIVER CITY POLICE DEPT"></div>
               <div class="form-group"><label>RELATED CASE #</label><input type="text" id="sw-caseno" placeholder="INC-XXXXXX"></div>
               <div class="form-group"><label>CRIME BEING INVESTIGATED</label><input type="text" id="sw-crime" placeholder="IC XX-XX-X-X — Offense Name"></div>
@@ -1689,7 +2021,7 @@
           <div class="form-section-header"><span class="section-icon">🚔</span><div class="form-section-title">PURSUIT INITIATION</div></div>
           <div class="form-section-body">
             <div class="form-grid cols-3">
-              <div class="form-group"><label>INITIATING OFFICER / UNIT</label><input type="text" id="pur-officer" value="4-ADAM-12 | SGT. R. MILLER"></div>
+              <div class="form-group"><label>INITIATING OFFICER / UNIT</label><div id="pur-officer" style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:8px 10px;font-family:var(--font-mono);font-size:13px;color:var(--cyber);letter-spacing:1px;opacity:0.8;">—</div></div>
               <div class="form-group"><label>INITIAL REASON FOR STOP</label><input type="text" id="pur-reason" placeholder="e.g. Speeding 20 over, Ran red light, BOLO plate match"></div>
               <div class="form-group"><label>SUSPECT VEHICLE</label><input type="text" id="pur-veh" placeholder="2020 BLK DODGE CHARGER"></div>
               <div class="form-group"><label>PLATE # (IF OBTAINED)</label><input type="text" id="pur-plate" placeholder="ABC-1234 or UNKNOWN" style="text-transform:uppercase"></div>
@@ -1807,7 +2139,7 @@
           <div class="form-section-body">
             <div class="form-grid">
               <div class="form-group"><label>RECEIVED FROM (NAME / ROLE)</label><input type="text" id="ev-from" placeholder="SUBJECT NAME, WITNESS, or COLLECTED BY OFFICER"></div>
-              <div class="form-group"><label>RECEIVED BY (OFFICER / EVIDENCE TECH)</label><input type="text" id="ev-by" value="4-ADAM-12 | SGT. R. MILLER"></div>
+              <div class="form-group"><label>RECEIVED BY (OFFICER / EVIDENCE TECH)</label><div id="ev-by" style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:8px 10px;font-family:var(--font-mono);font-size:13px;color:var(--cyber);letter-spacing:1px;opacity:0.8;">—</div></div>
               <div class="form-group"><label>STORAGE LOCATION</label>
                 <select id="ev-storage">
                   <option>EVIDENCE ROOM — PRIMARY</option><option>EVIDENCE ROOM — SECURED LOCKER</option>
@@ -1926,6 +2258,69 @@ function saveIncidents(arr) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
 }
 
+// ── SESSION ────────────────────────────────────
+function getOfficerStr() {
+  const name = sessionStorage.getItem('mdt_officer_name') || '—';
+  const cs   = sessionStorage.getItem('mdt_callsign') || '—';
+  return `${cs.toUpperCase()} | ${name.toUpperCase()}`;
+}
+
+function updateOfficerDisplays() {
+  const str = getOfficerStr();
+  const name = (sessionStorage.getItem('mdt_officer_name') || '—').toUpperCase();
+  const cs   = (sessionStorage.getItem('mdt_callsign') || '—').toUpperCase();
+
+  // Topbar
+  const tb = document.getElementById('topbar-officer-display');
+  if (tb) tb.textContent = `UNIT ${cs}  |  ${name}`;
+
+  // Nav footer
+  const nf = document.getElementById('nav-footer-session');
+  if (nf) nf.innerHTML = `SYS v4.2.1<br>ENCRYPTED<br>SHIFT: DAY<br><br><span style="color:var(--cyber);letter-spacing:0;">${cs}</span><br><span style="font-size:9px;">${name}</span>`;
+
+  // All officer display divs
+  ['inc-officer','pca-affiant','sw-affiant','pur-officer','ev-by'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.tagName !== 'INPUT') el.textContent = str;
+  });
+}
+
+function signOn() {
+  const nameEl = document.getElementById('login-name');
+  const csEl   = document.getElementById('login-callsign');
+  const errEl  = document.getElementById('login-error');
+
+  const name = nameEl.value.trim();
+  const cs   = csEl.value.trim();
+
+  if (!name) { errEl.textContent = '⚠ OFFICER NAME IS REQUIRED'; nameEl.focus(); return; }
+  if (!cs)   { errEl.textContent = '⚠ UNIT / CALLSIGN IS REQUIRED'; csEl.focus(); return; }
+
+  sessionStorage.setItem('mdt_officer_name', name);
+  sessionStorage.setItem('mdt_callsign', cs.toUpperCase());
+
+  document.getElementById('login-overlay').classList.add('hidden');
+  updateOfficerDisplays();
+  renderDispatch();
+}
+
+function signOff() {
+  if (!confirm('SIGN OFF DUTY?\n\nThis will end your current session.')) return;
+  sessionStorage.removeItem('mdt_officer_name');
+  sessionStorage.removeItem('mdt_callsign');
+  // Reset officer displays
+  ['inc-officer','pca-affiant','sw-affiant','pur-officer','ev-by'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.tagName !== 'INPUT') el.textContent = '—';
+  });
+  document.getElementById('topbar-officer-display').textContent = 'UNIT —  |  —';
+  // Show login again
+  document.getElementById('login-name').value = '';
+  document.getElementById('login-callsign').value = '';
+  document.getElementById('login-error').textContent = '';
+  document.getElementById('login-overlay').classList.remove('hidden');
+}
+
 // ── CLOCK ─────────────────────────────────────
 function updateClock() {
   const now = new Date();
@@ -1937,11 +2332,25 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// ── DEFAULT FORM VALUES ────────────────────────
+// ── PAGE INIT — SESSION CHECK ──────────────────
 (function() {
+  // Set default date/time on the form
   const now = new Date();
-  document.getElementById('inc-date').value = now.toISOString().slice(0,10);
-  document.getElementById('inc-time').value = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  const di = document.getElementById('inc-date');
+  const ti = document.getElementById('inc-time');
+  if (di) di.value = now.toISOString().slice(0,10);
+  if (ti) ti.value = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+
+  // Check for existing session
+  const savedName = sessionStorage.getItem('mdt_officer_name');
+  const savedCs   = sessionStorage.getItem('mdt_callsign');
+
+  if (savedName && savedCs) {
+    // Valid session — skip login, populate displays
+    document.getElementById('login-overlay').classList.add('hidden');
+    updateOfficerDisplays();
+  }
+  // else: overlay stays visible (default state)
 })();
 
 // ── TAB NAVIGATION ────────────────────────────
@@ -2158,6 +2567,8 @@ function onReportTypeChange() {
 
   submitBar.style.display = 'flex';
   document.getElementById('inc-number-display').textContent = REPORT_LABELS[type];
+  // Ensure officer displays are populated from session
+  updateOfficerDisplays();
 }
 
 // ── EVIDENCE ITEM ROWS ─────────────────────────
@@ -2194,7 +2605,7 @@ function addEvidenceItem() {
 // ── DIGITAL SIGNATURE ─────────────────────────
 const signatures = {};
 function signDocument(prefix) {
-  const officer = document.getElementById('inc-officer')?.value || '4-ADAM-12 | SGT. R. MILLER';
+  const officer = getOfficerStr();
   const now = new Date();
   const ts = now.toLocaleDateString('en-US') + ' ' + now.toLocaleTimeString('en-US');
   signatures[prefix] = { officer, ts };
@@ -2221,7 +2632,7 @@ function submitReport() {
 
   const date = document.getElementById('inc-date').value;
   const time = document.getElementById('inc-time').value;
-  const officer = document.getElementById('inc-officer').value.trim();
+  const officer = getOfficerStr();
 
   if (!date) { flashStatus('⚠ DATE IS REQUIRED'); return; }
 
@@ -2383,8 +2794,7 @@ function clearReportForm() {
   // Reset all text inputs and selects inside the tab
   const tab = document.getElementById('tab-incident');
   tab.querySelectorAll('input[type="text"], input[type="date"], input[type="time"], textarea').forEach(el => {
-    const keep = ['inc-officer','pca-affiant','pca-agency','sw-affiant','sw-agency','uof-collector','ev-by','pur-officer'];
-    if (!keep.includes(el.id)) el.value = '';
+    el.value = '';
   });
   tab.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
   tab.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
@@ -2409,8 +2819,8 @@ function clearReportForm() {
   const ti = document.getElementById('inc-time');
   if (di) di.value = now.toISOString().slice(0,10);
   if (ti) ti.value = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  const of2 = document.getElementById('inc-officer');
-  if (of2) of2.value = '4-ADAM-12 | SGT. R. MILLER';
+  // Re-populate officer displays from session
+  updateOfficerDisplays();
   flashStatus('FORM CLEARED');
 }
 
