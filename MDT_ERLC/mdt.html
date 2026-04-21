@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MDT — Mobile Data Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="mdt.css">
+</head>
+<body>
+
+<!-- ══ LOGIN OVERLAY ══════════════════════════════════════════ -->
+<div id="login-overlay">
+  <div class="login-top-bar"></div>
+
+  <div class="login-box">
+
+    <!-- AGENCY TOGGLE -->
+    <div class="agency-toggle" style="margin-bottom:20px;">
+      <button class="agency-toggle-btn active" id="toggle-pd" onclick="selectAgency('PD')">🏛 POLICE DEPT</button>
+      <button class="agency-toggle-btn" id="toggle-so" onclick="selectAgency('SO')">⭐ SHERIFF'S OFFICE</button>
+    </div>
+
+    <!-- POLICE DEPT SEAL -->
+    <div class="dept-seal seal-pd">
+      <div class="seal-ring-outer"></div>
+      <div class="seal-ring-inner"></div>
+      <svg class="seal-text-ring" viewBox="0 0 110 110">
+        <defs>
+          <path id="seal-arc-top-pd" d="M 55,55 m -38,0 a 38,38 0 1,1 76,0" />
+          <path id="seal-arc-bot-pd" d="M 55,55 m -34,0 a 34,34 0 0,0 68,0" />
+        </defs>
+        <text font-family="'Rajdhani',sans-serif" font-size="7.5" font-weight="700" fill="var(--cyber-dim)" letter-spacing="2.8">
+          <textPath href="#seal-arc-top-pd">RIVER CITY POLICE DEPARTMENT</textPath>
+        </text>
+        <text font-family="'Rajdhani',sans-serif" font-size="7" font-weight="600" fill="var(--cyber-dim)" letter-spacing="2">
+          <textPath href="#seal-arc-bot-pd" startOffset="14%">EST. 1987 · LIBERTY CO.</textPath>
+        </text>
+      </svg>
+      <div class="seal-center"><span style="font-size:32px;line-height:1;">🏛</span></div>
+    </div>
+
+    <!-- SHERIFF'S OFFICE SEAL -->
+    <div class="dept-seal seal-so" style="margin-bottom:20px;">
+      <div class="seal-ring-outer" style="border-color:#996600;box-shadow:0 0 18px rgba(255,184,0,0.2),inset 0 0 18px rgba(255,184,0,0.06);"></div>
+      <div class="seal-ring-inner" style="border-color:rgba(255,184,0,0.3);background:rgba(255,184,0,0.04);"></div>
+      <svg class="seal-text-ring" viewBox="0 0 110 110">
+        <defs>
+          <path id="seal-arc-top-so" d="M 55,55 m -38,0 a 38,38 0 1,1 76,0" />
+          <path id="seal-arc-bot-so" d="M 55,55 m -34,0 a 34,34 0 0,0 68,0" />
+        </defs>
+        <text font-family="'Rajdhani',sans-serif" font-size="7" font-weight="700" fill="#996600" letter-spacing="2.2">
+          <textPath href="#seal-arc-top-so">LIBERTY COUNTY SHERIFF'S OFFICE</textPath>
+        </text>
+        <text font-family="'Rajdhani',sans-serif" font-size="7" font-weight="600" fill="#996600" letter-spacing="2">
+          <textPath href="#seal-arc-bot-so" startOffset="14%">EST. 1954 · LIBERTY CO.</textPath>
+        </text>
+      </svg>
+      <div class="seal-center">
+        <svg width="38" height="38" viewBox="0 0 38 38">
+          <polygon points="19,2 23.5,13 35.5,13 26,20.5 29.5,32 19,25 8.5,32 12,20.5 2.5,13 14.5,13" fill="none" stroke="#ffb800" stroke-width="1.5"/>
+          <polygon points="19,7 22,15 30.5,15 23.5,20 26,28 19,23.5 12,28 14.5,20 7.5,15 16,15" fill="rgba(255,184,0,0.12)" stroke="#ffb800" stroke-width="0.8"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="login-agency" id="login-agency-name">METRO PD</div>
+    <div class="login-sub" id="login-agency-sub">RIVER CITY POLICE DEPARTMENT</div>
+    <div class="login-sub" style="font-size:8px;letter-spacing:6px;margin-top:2px;color:var(--text-dim);">LIBERTY COUNTY · INDIANA</div>
+
+    <div class="login-divider"></div>
+    <div class="login-system-label" id="login-system-label">◆ SECURE MDT ACCESS — OFFICER SIGN-ON ◆</div>
+
+    <div class="login-form">
+      <div class="login-field">
+        <label>OFFICER NAME</label>
+        <input type="text" id="login-name" placeholder="e.g. SGT. R. MILLER" autocomplete="off" onkeydown="if(event.key==='Enter')document.getElementById('login-callsign').focus()">
+      </div>
+      <div class="login-field">
+        <label id="callsign-label">UNIT / CALLSIGN</label>
+        <input type="text" id="login-callsign" placeholder="e.g. 4-ADAM-12" autocomplete="off" style="text-transform:uppercase;" onkeydown="if(event.key==='Enter')signOn()">
+      </div>
+      <div class="login-error" id="login-error"></div>
+      <button class="login-btn" id="login-btn" onclick="signOn()">▶ &nbsp; SIGN ON DUTY</button>
+    </div>
+
+    <div class="login-session-info">
+      SESSION ENCRYPTED · AES-256 · NCIC COMPLIANT<br>
+      ALL ACTIVITY IS LOGGED AND MONITORED
+    </div>
+
+  </div>
+
+  <!-- Warning footer -->
+  <div class="login-footer">
+    <span class="login-footer-icon">🔒</span>
+    <div class="login-footer-text">
+      WARNING — UNAUTHORIZED ACCESS TO THIS SYSTEM IS PROHIBITED UNDER 18 U.S.C. § 1030<br>
+      FOR AUTHORIZED LAW ENFORCEMENT PERSONNEL ONLY · VIOLATIONS WILL BE PROSECUTED
+    </div>
+    <span class="login-footer-icon">🔒</span>
+  </div>
+</div>
+<!-- ══ END LOGIN OVERLAY ══════════════════════════════════════ -->
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="agency-badge">
+    <!-- RCPD Shield — shown when theme-pd -->
+    <svg id="badge-shield" class="shield-icon" viewBox="0 0 32 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 1L2 7V18C2 26 8.5 33 16 35C23.5 33 30 26 30 18V7L16 1Z" fill="var(--cyber-glow)" stroke="var(--cyber)" stroke-width="1.5"/>
+      <circle cx="16" cy="17" r="6" fill="none" stroke="var(--cyber)" stroke-width="1"/>
+      <path d="M16 11V17L20 21" stroke="var(--cyber)" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M8 13L24 13" stroke="var(--cyber-glow-strong)" stroke-width="0.5"/>
+    </svg>
+    <!-- LCSO Star — shown when theme-lcso -->
+    <svg id="badge-star" class="shield-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none;">
+      <polygon points="18,2 22,13 34,13 24.5,20.5 28,31 18,24.5 8,31 11.5,20.5 2,13 14,13" fill="var(--cyber-glow)" stroke="var(--cyber)" stroke-width="1.5"/>
+      <polygon points="18,7 21,15 29.5,15 22.5,20 25,27.5 18,23 11,27.5 13.5,20 6.5,15 15,15" fill="var(--cyber-glow-strong)" stroke="var(--cyber)" stroke-width="0.7"/>
+      <circle cx="18" cy="18" r="4" fill="none" stroke="var(--cyber)" stroke-width="0.8"/>
+    </svg>
+    <div>
+      <div class="agency-name" id="topbar-agency-name">METRO PD</div>
+      <div class="agency-sub" id="topbar-agency-sub">MOBILE DATA TERMINAL</div>
+    </div>
+  </div>
+
+  <div class="divider-v"></div>
+
+  <div class="status-pills">
+    <div class="pill pill-green">● ONLINE</div>
+    <div class="pill pill-blue">NCIC LINKED</div>
+  </div>
+
+  <div class="topbar-right">
+    <div class="topbar-officer-block">
+      <div class="unit-id" id="topbar-officer-display">UNIT — &nbsp;|&nbsp; —</div>
+      <button class="btn-signoff" onclick="signOff()">◼ SIGN OFF</button>
+    </div>
+    <div class="divider-v"></div>
+    <div id="clock">00:00:00</div>
+  </div>
+</div>
+
+<!-- BOLO TICKER -->
+<div class="bolo-bar" style="margin: 0; border-left: none; border-right: none; border-radius: 0;">
+  <div class="bolo-label">◆ BOLO</div>
+  <div class="bolo-ticker-wrap">
+    <div class="bolo-ticker" id="boloTicker"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <!-- SIDEBAR NAV -->
+  <nav id="sidebar">
+    <div class="nav-section-label">OPERATIONS</div>
+    <button class="nav-btn active" onclick="switchTab('dispatch', this)">
+      <span class="nav-icon">📡</span> DISPATCH
+    </button>
+    <button class="nav-btn" onclick="switchTab('search', this)">
+      <span class="nav-icon">🔍</span> PERSON/PLATE
+    </button>
+    <div class="nav-section-label" style="margin-top:8px;">RECORDS</div>
+    <button class="nav-btn" onclick="switchTab('incident', this)">
+      <span class="nav-icon">📋</span> NEW REPORT
+    </button>
+    <button class="nav-btn" onclick="switchTab('database', this)">
+      <span class="nav-icon">🗄️</span> DATABASE
+    </button>
+
+    <div class="nav-section-label" style="margin-top:8px;">TOOLS</div>
+    <button class="nav-btn" onclick="openModal('miranda-modal')">
+      <span class="nav-icon">⚖️</span> LEGAL CARDS
+    </button>
+    <button class="nav-btn" onclick="openModal('codes-modal')">
+      <span class="nav-icon">📻</span> CODE SEARCH
+    </button>
+
+    <!-- LIVE CAD FEED -->
+    <div id="live-cad-box" style="margin:8px 8px 0;">
+      <div class="cad-header">
+        <div class="cad-header-title">LIVE CAD</div>
+        <div class="cad-live-dot"></div>
+      </div>
+      <div class="cad-feed" id="cad-feed">
+        <div class="cad-empty">AWAITING CALLS...</div>
+      </div>
+    </div>
+
+    <div class="nav-footer" id="nav-footer-session">
+      SYS v4.2.1<br>
+      ENCRYPTED<br>
+      SHIFT: DAY
+    </div>
+  </nav>
+
+  <!-- CONTENT PANELS -->
+  <div id="content">
+
+    <!-- ── DISPATCH TAB ── -->
+    <div class="tab-panel active" id="tab-dispatch">
+      <div class="panel-header">
+        <div class="panel-title">DISPATCH</div>
+        <div class="panel-subtitle">LIVE CALLS — <span id="call-count">0</span> ACTIVE</div>
+      </div>
+
+      <div class="dispatch-grid">
+        <div>
+          <div class="card-title">ACTIVE CALLS FOR SERVICE</div>
+          <div id="dispatch-calls"></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card">
+            <div class="card-title">UNIT STATUS</div>
+            <div id="unit-status-list"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">WEATHER / CONDITIONS</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:2;">
+              <div>🌡 TEMP: 68°F</div>
+              <div>☁️ CONDITIONS: PARTLY CLOUDY</div>
+              <div>👁 VISIBILITY: 10 MILES</div>
+              <div>🌬 WIND: 8 MPH NW</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SEARCH TAB ── -->
+    <div class="tab-panel" id="tab-search">
+      <div class="panel-header">
+        <div class="panel-title">RECORD SEARCH</div>
+        <div class="panel-subtitle">NCIC / STATE / LOCAL</div>
+      </div>
+
+      <div class="search-tabs">
+        <button class="search-tab-btn active" onclick="switchSearchTab('person', this)">PERSON SEARCH</button>
+        <button class="search-tab-btn" onclick="switchSearchTab('plate', this)">PLATE SEARCH</button>
+      </div>
+
+      <div class="search-content active" id="search-person">
+        <div class="search-bar">
+          <input type="text" id="person-query" placeholder="Enter name, DOB, or SSN..." onkeydown="if(event.key==='Enter')searchPerson()">
+          <button class="btn btn-primary" onclick="searchPerson()">▶ RUN</button>
+        </div>
+        <div id="person-results"></div>
+      </div>
+
+      <div class="search-content" id="search-plate">
+        <div class="search-bar">
+          <input type="text" id="plate-query" placeholder="Enter license plate (e.g. ABC-1234)..." onkeydown="if(event.key==='Enter')searchPlate()">
+          <button class="btn btn-primary" onclick="searchPlate()">▶ RUN</button>
+        </div>
+        <div id="plate-results"></div>
+      </div>
+    </div>
+
+    <!-- ── INCIDENT / REPORT TAB ── -->
+    <div class="tab-panel" id="tab-incident">
+      <div class="panel-header">
+        <div class="panel-title">NEW REPORT</div>
+        <div class="panel-subtitle" id="inc-number-display">ID#: AUTO-ASSIGN</div>
+      </div>
+
+      <!-- REPORT TYPE SELECTOR -->
+      <div class="report-type-selector">
+        <label>REPORT TYPE</label>
+        <select id="report-type-select" onchange="onReportTypeChange()">
+          <option value="">— SELECT REPORT TYPE —</option>
+          <option value="INCIDENT">📋 INCIDENT / CASE REPORT</option>
+          <option value="CRASH">🚗 VEHICLE CRASH REPORT</option>
+          <option value="UOF">⚡ USE OF FORCE REPORT</option>
+          <option value="PCA">⚖️ PROBABLE CAUSE AFFIDAVIT</option>
+          <option value="WARRANT">🔍 SEARCH WARRANT AFFIDAVIT</option>
+          <option value="PURSUIT">🚔 PURSUIT REPORT</option>
+          <option value="EVIDENCE">🏷️ PROPERTY / EVIDENCE LOG</option>
+          <option value="SUPPLEMENT">📎 SUPPLEMENTAL REPORT</option>
+        </select>
+      </div>
+
+      <!-- COMMON HEADER (always visible once type selected) -->
+      <div id="rpt-common" style="display:none;" class="card">
+        <div class="card-title">REPORT HEADER — <span id="rpt-type-label" style="color:var(--cyber);"></span></div>
+        <div class="form-grid cols-3">
+          <div class="form-group">
+            <label>DATE</label>
+            <input type="date" id="inc-date">
+          </div>
+          <div class="form-group">
+            <label>TIME</label>
+            <input type="time" id="inc-time">
+          </div>
+          <div class="form-group">
+            <label>REPORTING OFFICER</label>
+            <div id="inc-officer" style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:8px 10px;font-family:var(--font-mono);font-size:13px;color:var(--cyber);letter-spacing:1px;opacity:0.8;">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ FORM PANELS ══ -->
+
+      <!-- 1. INCIDENT / CASE REPORT -->
+      <div id="form-INCIDENT" class="rpt-form" style="display:none;gap:12px;flex-direction:column;">
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">📌</span><div class="form-section-title">INCIDENT DETAILS</div></div>
+          <div class="form-section-body">
+            <div class="form-grid cols-3">
+              <div class="form-group">
+                <label>CHARGE CATEGORY</label>
+                <select id="inc-charge-class" onchange="filterStatutes()">
+                  <option value="">— ALL CATEGORIES —</option>
+                  <option value="TRAFFIC">TRAFFIC VIOLATIONS</option>
+                  <option value="OWI">OWI / IMPAIRED DRIVING</option>
+                  <option value="NARCOTICS">NARCOTICS / CONTROLLED SUBSTANCES</option>
+                  <option value="PERSONS">CRIMES AGAINST PERSONS</option>
+                  <option value="PROPERTY">PROPERTY CRIMES</option>
+                  <option value="WEAPONS">WEAPONS OFFENSES</option>
+                  <option value="OBSTRUCTION">OBSTRUCTION / RESISTING</option>
+                  <option value="DISORDER">DISORDERLY / PUBLIC ORDER</option>
+                  <option value="OTHER">OTHER / MISC</option>
+                </select>
+              </div>
+              <div class="form-group" style="grid-column:span 2;">
+                <label>INDIANA STATUTE / OFFENSE CODE</label>
+                <select id="inc-type" onchange="onStatuteSelect()">
+                  <option value="">— SELECT STATUTE —</option>
+                </select>
+              </div>
+              <div class="form-group full-width" id="statute-autofill-row" style="display:none;">
+                <div style="background:var(--bg-input);border:1px solid var(--cyber-dim);border-radius:2px;padding:10px 14px;display:flex;gap:24px;align-items:center;flex-wrap:wrap;">
+                  <div><span style="font-family:var(--font-ui);font-size:9px;letter-spacing:2px;color:var(--text-secondary);font-weight:600;">STATUTE</span><div id="sf-code" style="color:var(--cyber);font-size:13px;letter-spacing:1px;margin-top:2px;"></div></div>
+                  <div><span style="font-family:var(--font-ui);font-size:9px;letter-spacing:2px;color:var(--text-secondary);font-weight:600;">BASE FINE</span><div id="sf-fine" style="color:var(--accent-amber);font-size:13px;margin-top:2px;"></div></div>
+                  <div><span style="font-family:var(--font-ui);font-size:9px;letter-spacing:2px;color:var(--text-secondary);font-weight:600;">COURT APPEARANCE</span><div id="sf-court" style="font-size:13px;margin-top:2px;"></div></div>
+                  <div><span style="font-family:var(--font-ui);font-size:9px;letter-spacing:2px;color:var(--text-secondary);font-weight:600;">LICENSE ACTION</span><div id="sf-license" style="font-size:13px;margin-top:2px;"></div></div>
+                </div>
+              </div>
+              <div class="form-group full-width">
+                <label>LOCATION / ADDRESS</label>
+                <input type="text" id="inc-location" placeholder="Street address or cross-streets">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">👤</span><div class="form-section-title">SUBJECT INFORMATION</div></div>
+          <div class="form-section-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>SUBJECT NAME (LAST, FIRST MI)</label>
+                <input type="text" id="inc-name" placeholder="DOE, JOHN A">
+              </div>
+              <div class="form-group">
+                <label>DATE OF BIRTH</label>
+                <input type="date" id="inc-dob">
+              </div>
+              <div class="form-group">
+                <label>RACE / SEX</label>
+                <select id="inc-race">
+                  <option value="">— SELECT —</option>
+                  <option>W/M — WHITE MALE</option><option>W/F — WHITE FEMALE</option>
+                  <option>B/M — BLACK MALE</option><option>B/F — BLACK FEMALE</option>
+                  <option>H/M — HISPANIC MALE</option><option>H/F — HISPANIC FEMALE</option>
+                  <option>A/M — ASIAN MALE</option><option>A/F — ASIAN FEMALE</option>
+                  <option>O/M — OTHER MALE</option><option>O/F — OTHER FEMALE</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>ARREST? / CITATION #</label>
+                <input type="text" id="inc-citation" placeholder="CIT-00000 or ARRESTED">
+              </div>
+              <div class="form-group">
+                <label>VEHICLE PLATE #</label>
+                <input type="text" id="inc-plate" placeholder="ABC-1234" style="text-transform:uppercase">
+              </div>
+              <div class="form-group">
+                <label>VEHICLE DESCRIPTION</label>
+                <input type="text" id="inc-vehicle" placeholder="2019 BLK FORD F-150">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">📝</span><div class="form-section-title">NARRATIVE</div></div>
+          <div class="form-section-body">
+            <textarea id="inc-narrative" rows="7" placeholder="On [date] at approximately [time], [reporting officer] was [dispatched to / observed] ...&#10;&#10;Provide a detailed account of events, observations, evidence collected, and any actions taken."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. VEHICLE CRASH REPORT -->
+      <div id="form-CRASH" class="rpt-form" style="display:none;gap:12px;flex-direction:column;">
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🌦️</span><div class="form-section-title">CONDITIONS AT TIME OF CRASH</div></div>
+          <div class="form-section-body">
+            <div class="form-grid cols-3">
+              <div class="form-group">
+                <label>WEATHER CONDITIONS</label>
+                <select id="cr-weather">
+                  <option value="">— SELECT —</option>
+                  <option>CLEAR</option><option>CLOUDY</option><option>RAIN</option>
+                  <option>HEAVY RAIN</option><option>FOG / SMOG</option>
+                  <option>SNOW</option><option>SLEET / FREEZING RAIN</option>
+                  <option>WIND</option><option>UNKNOWN</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>LIGHT CONDITIONS</label>
+                <select id="cr-light">
+                  <option value="">— SELECT —</option>
+                  <option>DAYLIGHT</option><option>DAWN / DUSK</option>
+                  <option>DARK — STREET LIGHTS ON</option>
+                  <option>DARK — NO STREET LIGHTS</option>
+                  <option>DARK — STREET LIGHTS OFF</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>ROAD SURFACE</label>
+                <select id="cr-road">
+                  <option value="">— SELECT —</option>
+                  <option>DRY</option><option>WET</option><option>ICY</option>
+                  <option>SNOW COVERED</option><option>SLUSH</option>
+                  <option>MUD / DIRT</option><option>DEBRIS</option><option>UNKNOWN</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>ROAD TYPE</label>
+                <select id="cr-roadtype">
+                  <option value="">— SELECT —</option>
+                  <option>STRAIGHT / LEVEL</option><option>STRAIGHT / GRADE</option>
+                  <option>CURVE / LEVEL</option><option>CURVE / GRADE</option>
+                  <option>INTERSECTION</option><option>INTERCHANGE</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>CRASH TYPE</label>
+                <select id="cr-type">
+                  <option value="">— SELECT —</option>
+                  <option>REAR-END</option><option>HEAD-ON</option>
+                  <option>SIDESWIPE — SAME DIR</option><option>SIDESWIPE — OPPOSITE DIR</option>
+                  <option>ANGLE / T-BONE</option><option>SINGLE VEHICLE</option>
+                  <option>FIXED OBJECT</option><option>PEDESTRIAN</option>
+                  <option>BICYCLE</option><option>ANIMAL</option><option>OTHER</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>INJURY SEVERITY</label>
+                <select id="cr-injury">
+                  <option value="">— SELECT —</option>
+                  <option>NONE / PROPERTY DAMAGE ONLY</option>
+                  <option>POSSIBLE INJURY</option>
+                  <option>NON-INCAPACITATING INJURY</option>
+                  <option>INCAPACITATING INJURY</option>
+                  <option>FATAL</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🚘</span><div class="form-section-title">VEHICLE 1 (UNIT 1)</div></div>
+          <div class="form-section-body">
+            <div class="form-grid cols-3">
+              <div class="form-group"><label>PLATE #</label><input type="text" id="cr-v1-plate" placeholder="ABC-1234" style="text-transform:uppercase"></div>
+              <div class="form-group"><label>VIN</label><input type="text" id="cr-v1-vin" placeholder="1HGBH41JXMN109186" style="text-transform:uppercase"></div>
+              <div class="form-group"><label>YEAR / MAKE / MODEL</label><input type="text" id="cr-v1-desc" placeholder="2020 WHT HONDA CIVIC"></div>
+              <div class="form-group"><label>DRIVER NAME</label><input type="text" id="cr-v1-driver" placeholder="LAST, FIRST MI"></div>
+              <div class="form-group"><label>DOB</label><input type="date" id="cr-v1-dob"></div>
+              <div class="form-group"><label>INS. POLICY #</label><input type="text" id="cr-v1-ins" placeholder="POL-000000000"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🚘</span><div class="form-section-title">VEHICLE 2 (UNIT 2)</div></div>
+          <div class="form-section-body">
+            <div class="form-grid cols-3">
+              <div class="form-group"><label>PLATE #</label><input type="text" id="cr-v2-plate" placeholder="ABC-1234" style="text-transform:uppercase"></div>
+              <div class="form-group"><label>VIN</label><input type="text" id="cr-v2-vin" placeholder="1HGBH41JXMN109186" style="text-transform:uppercase"></div>
+              <div class="form-group"><label>YEAR / MAKE / MODEL</label><input type="text" id="cr-v2-desc" placeholder="2019 BLK FORD F-150"></div>
+              <div class="form-group"><label>DRIVER NAME</label><input type="text" id="cr-v2-driver" placeholder="LAST, FIRST MI"></div>
+              <div class="form-group"><label>DOB</label><input type="date" id="cr-v2-dob"></div>
+              <div class="form-group"><label>INS. POLICY #</label><input type="text" id="cr-v2-ins" placeholder="POL-000000000"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">💥</span><div class="form-section-title">POINT OF IMPACT DIAGRAM</div></div>
+          <div class="form-section-body">
+            <div class="form-subheader">SELECT POINT(S) OF IMPACT — UNIT 1</div>
+            <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+              <div>
+                <div class="impact-diagram" id="impact-grid">
+                  <div class="impact-cell" data-pos="FL" onclick="toggleImpact(this)">FL</div>
+                  <div class="impact-cell" data-pos="F" onclick="toggleImpact(this)">F</div>
+                  <div class="impact-cell" data-pos="FR" onclick="toggleImpact(this)">FR</div>
+                  <div class="impact-cell" data-pos="L" onclick="toggleImpact(this)">L</div>
+                  <div class="impact-cell vehicle-center">🚗</div>
+                  <div class="impact-cell" data-pos="R" onclick="toggleImpact(this)">R</div>
+                  <div class="impact-cell" data-pos="RL" onclick="toggleImpact(this)">RL</div>
+                  <div class="impact-cell" data-pos="R" onclick="toggleImpact(this)">R</div>
+                  <div class="impact-cell" data-pos="RR" onclick="toggleImpact(this)">RR</div>
+                </div>
+                <div style="font-size:9px;color:var(--text-dim);text-align:center;margin-top:4px;letter-spacing:1px;">F=FRONT L=LEFT R=RIGHT</div>
+              </div>
+              <div style="flex:1;min-width:200px;">
+                <div class="form-group">
+                  <label>IMPACT DESCRIPTION / DAMAGE NOTES</label>
+                  <textarea id="cr-impact-notes" rows="4" placeholder="Describe damage, skid marks, final resting positions, debris field, and point of impact for each vehicle..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">📝</span><div class="form-section-title">CRASH NARRATIVE</div></div>
+          <div class="form-section-body">
+            <textarea id="cr-narrative" rows="6" placeholder="Provide a detailed account of the crash sequence, witness statements, citations issued, and towing information..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. USE OF FORCE -->
+      <div id="form-UOF" class="rpt-form" style="display:none;gap:12px;flex-direction:column;">
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">⚠️</span><div class="form-section-title">SUBJECT INFORMATION &amp; RESISTANCE</div></div>
+          <div class="form-section-body">
+            <div class="form-grid cols-3">
+              <div class="form-group"><label>SUBJECT NAME</label><input type="text" id="uof-subject" placeholder="LAST, FIRST MI"></div>
+              <div class="form-group"><label>DOB</label><input type="date" id="uof-dob"></div>
+              <div class="form-group"><label>RACE / SEX</label>
+                <select id="uof-race">
+                  <option value="">— SELECT —</option>
+                  <option>W/M</option><option>W/F</option><option>B/M</option><option>B/F</option>
+                  <option>H/M</option><option>H/F</option><option>A/M</option><option>A/F</option><option>O/M</option><option>O/F</option>
+                </select>
+              </div>
+              <div class="form-group"><label>INCIDENT LOCATION</label><input type="text" id="uof-location" placeholder="Address / cross-street"></div>
+              <div class="form-group"><label>RELATED CASE / CAD #</label><input type="text" id="uof-caseno" placeholder="INC-XXXXXX or CAD-XXXX"></div>
+              <div class="form-group"><label>SUBJECT ARMED?</label>
+                <select id="uof-armed"><option value="">— SELECT —</option>
+                  <option>NO — UNARMED</option><option>YES — FIREARM</option>
+                  <option>YES — EDGED WEAPON</option><option>YES — OTHER WEAPON</option>
+                  <option>UNKNOWN</option>
+                </select>
+              </div>
+              <div class="form-group full-width"><label>TYPE OF RESISTANCE (SELECT ALL THAT APPLY)</label>
+                <div style="display:flex;gap:16px;flex-wrap:wrap;padding:8px 0;">
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="uof-resist-passive"> PASSIVE RESISTANCE</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="uof-resist-active"> ACTIVE RESISTANCE</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="uof-resist-forcible"> FORCIBLE RESISTANCE (ASSAULT ON OFFICER)</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="uof-resist-deadly"> DEADLY FORCE / THREAT OF DEADLY FORCE</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">⚡</span><div class="form-section-title">FORCE TECHNIQUES EMPLOYED</div></div>
+          <div class="form-section-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div>
+                <div class="form-subheader">OFFICER TECHNIQUES USED</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="uof-t-verbal"> VERBAL COMMANDS</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="uof-t-hands"> EMPTY-HAND CONTROL / PHYSICAL</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="uof-t-taser"> TASER / CEW DEPLOYMENT</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="uof-t-oc"> OC SPRAY (PEPPER SPRAY)</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="uof-t-baton"> IMPACT WEAPON (BATON)</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="uof-t-k9"> K-9 DEPLOYMENT</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="uof-t-firearm"> FIREARM / DEADLY FORCE</label>
+                </div>
+              </div>
+              <div>
+                <div class="form-subheader">TASER / FIREARM DETAILS (IF APPLICABLE)</div>
+                <div class="form-group" style="margin-bottom:10px;">
+                  <label>TASER SERIAL # / DART DEPLOYMENT</label>
+                  <input type="text" id="uof-taser-serial" placeholder="SN: X26P-XXXXXXXX | DARTS: 1 / 2">
+                </div>
+                <div class="form-group" style="margin-bottom:10px;">
+                  <label>SHOTS FIRED (IF APPLICABLE)</label>
+                  <input type="text" id="uof-shots" placeholder="# ROUNDS FIRED / STRIKES">
+                </div>
+                <div class="form-group">
+                  <label>WEAPON SERIAL # (IF DRAWN)</label>
+                  <input type="text" id="uof-weapon-serial" placeholder="SN: GLOCK-XXXXXXXXX">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🏥</span><div class="form-section-title">INJURIES &amp; MEDICAL</div></div>
+          <div class="form-section-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>OFFICER INJURY (IF ANY)</label>
+                <select id="uof-off-injury">
+                  <option>NONE</option><option>MINOR (SCRATCH / BRUISE)</option>
+                  <option>MODERATE (LACERATION / SPRAIN)</option>
+                  <option>SERIOUS (FRACTURE / CONCUSSION)</option>
+                  <option>CRITICAL</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>SUBJECT INJURY (IF ANY)</label>
+                <select id="uof-sub-injury">
+                  <option>NONE OBSERVED</option><option>MINOR (SCRATCH / BRUISE)</option>
+                  <option>MODERATE (LACERATION / DART WOUNDS)</option>
+                  <option>SERIOUS (FRACTURE / CONCUSSION)</option>
+                  <option>CRITICAL</option><option>DECEASED</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>MEDICAL ATTENTION PROVIDED?</label>
+                <select id="uof-medattn">
+                  <option>NO MEDICAL ATTENTION REQUIRED</option>
+                  <option>FIRST AID ON SCENE</option>
+                  <option>EMS RESPONDED — TREATED ON SCENE</option>
+                  <option>EMS TRANSPORTED TO HOSPITAL</option>
+                  <option>SUBJECT REFUSED MEDICAL AID</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>SUPERVISOR NOTIFIED</label>
+                <select id="uof-supervisor">
+                  <option value="">— SELECT —</option>
+                  <option>YES — NOTIFIED ON SCENE</option>
+                  <option>YES — NOTIFIED VIA RADIO</option>
+                  <option>YES — NOTIFIED VIA PHONE</option>
+                  <option>NO — SUPERVISOR NOT AVAILABLE</option>
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label>SUPERVISOR NAME / BADGE</label>
+                <input type="text" id="uof-sup-name" placeholder="SGT. NAME | BADGE #">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">📝</span><div class="form-section-title">USE OF FORCE NARRATIVE</div></div>
+          <div class="form-section-body">
+            <textarea id="uof-narrative" rows="7" placeholder="Describe in detail: the circumstances leading to force, the subject's specific actions and threats, each force technique used and why, subject's response to each technique, and how the situation was resolved..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. PROBABLE CAUSE AFFIDAVIT -->
+      <div id="form-PCA" class="rpt-form" style="display:none;gap:12px;flex-direction:column;">
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">⚖️</span><div class="form-section-title">AFFIANT &amp; CASE INFORMATION</div></div>
+          <div class="form-section-body">
+            <div class="form-grid cols-3">
+              <div class="form-group"><label>AFFIANT (OFFICER NAME / BADGE)</label><div id="pca-affiant" style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:8px 10px;font-family:var(--font-mono);font-size:13px;color:var(--cyber);letter-spacing:1px;opacity:0.8;">—</div></div>
+              <div class="form-group"><label>AGENCY</label><input type="text" id="pca-agency" placeholder="RIVER CITY POLICE DEPT" value="RIVER CITY POLICE DEPT"></div>
+              <div class="form-group"><label>RELATED CAD / CASE #</label><input type="text" id="pca-caseno" placeholder="CAD-XXXX or INC-XXXXXX"></div>
+              <div class="form-group"><label>DEFENDANT NAME</label><input type="text" id="pca-defendant" placeholder="LAST, FIRST MI"></div>
+              <div class="form-group"><label>DEFENDANT DOB</label><input type="date" id="pca-dob"></div>
+              <div class="form-group"><label>CHARGE(S)</label><input type="text" id="pca-charges" placeholder="IC 35-42-2-1 — Battery, etc."></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🔎</span><div class="form-section-title">FACTS ESTABLISHING PROBABLE CAUSE</div></div>
+          <div class="form-section-body">
+            <div class="form-group" style="margin-bottom:10px;">
+              <label>STATE THE FACTS WITH PARTICULARITY — INCLUDE DATES, TIMES, LOCATIONS, OBSERVATIONS, AND SOURCES</label>
+              <textarea id="pca-facts" rows="10" placeholder="Your affiant, [NAME], a sworn law enforcement officer employed by [AGENCY], states under oath the following facts:&#10;&#10;1. On [DATE] at approximately [TIME], affiant was [dispatched to / conducting surveillance at / contacted by]...&#10;&#10;2. Affiant observed / was informed by [source]...&#10;&#10;3. Based upon affiant's training and experience, [conclusion]...&#10;&#10;These facts establish probable cause to believe that [DEFENDANT] committed [OFFENSE]."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">✍️</span><div class="form-section-title">SWORN DIGITAL SIGNATURE — PENALTY OF PERJURY</div></div>
+          <div class="form-section-body">
+            <div style="background:var(--cyber-glow-xs);border:1px solid var(--border);border-radius:2px;padding:12px;margin-bottom:12px;font-size:11px;color:var(--text-secondary);line-height:1.8;letter-spacing:0.5px;">
+              I, the undersigned affiant, hereby swear or affirm under penalty of perjury pursuant to IC 35-44.1-2-1 that the foregoing statements are true and correct to the best of my knowledge, information, and belief. I understand that making a false statement herein is a criminal offense.
+            </div>
+            <div id="pca-sig-box" class="sig-box" onclick="signDocument('pca')">
+              <div class="sig-text">CLICK TO DIGITALLY SIGN — SWORN UNDER PENALTY OF PERJURY</div>
+              <div style="font-size:24px;opacity:0.3;">✍</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. SEARCH WARRANT AFFIDAVIT -->
+      <div id="form-WARRANT" class="rpt-form" style="display:none;gap:12px;flex-direction:column;">
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🔍</span><div class="form-section-title">WARRANT INFORMATION</div></div>
+          <div class="form-section-body">
+            <div class="form-grid cols-3">
+              <div class="form-group"><label>AFFIANT (OFFICER NAME / BADGE)</label><div id="sw-affiant" style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:8px 10px;font-family:var(--font-mono);font-size:13px;color:var(--cyber);letter-spacing:1px;opacity:0.8;">—</div></div>
+              <div class="form-group"><label>AGENCY</label><input type="text" id="sw-agency" value="RIVER CITY POLICE DEPT"></div>
+              <div class="form-group"><label>RELATED CASE #</label><input type="text" id="sw-caseno" placeholder="INC-XXXXXX"></div>
+              <div class="form-group"><label>CRIME BEING INVESTIGATED</label><input type="text" id="sw-crime" placeholder="IC XX-XX-X-X — Offense Name"></div>
+              <div class="form-group"><label>SUSPECT (IF KNOWN)</label><input type="text" id="sw-suspect" placeholder="LAST, FIRST MI or UNKNOWN"></div>
+              <div class="form-group"><label>WARRANT TYPE</label>
+                <select id="sw-type"><option>SEARCH WARRANT</option><option>SEARCH &amp; SEIZURE WARRANT</option><option>ARREST WARRANT</option></select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">📍</span><div class="form-section-title">PLACE / THING TO BE SEARCHED</div></div>
+          <div class="form-section-body">
+            <div class="form-group" style="margin-bottom:10px;">
+              <label>EXACT DESCRIPTION OF PREMISES / VEHICLE / PERSON TO BE SEARCHED</label>
+              <textarea id="sw-place" rows="4" placeholder="A single-family residence located at [FULL ADDRESS], described as a [COLOR] [STYLE] structure with [IDENTIFYING FEATURES]. The premises are associated with [NAME / ALIAS]..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">📦</span><div class="form-section-title">ITEMS TO BE SEIZED</div></div>
+          <div class="form-section-body">
+            <div class="form-group" style="margin-bottom:10px;">
+              <label>DESCRIBE WITH PARTICULARITY ALL ITEMS SOUGHT</label>
+              <textarea id="sw-items" rows="4" placeholder="1. Any and all controlled substances, including but not limited to [DRUG TYPE]...&#10;2. Paraphernalia associated with the manufacture, distribution, or use of controlled substances...&#10;3. Documents, records, ledgers, or electronic devices relating to drug trafficking...&#10;4. United States currency...&#10;5. Firearms and/or ammunition..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🔗</span><div class="form-section-title">NEXUS — CONNECTION BETWEEN ITEMS AND CRIME</div></div>
+          <div class="form-section-body">
+            <div class="form-group" style="margin-bottom:10px;">
+              <label>STATE THE FACTS ESTABLISHING NEXUS BETWEEN THE ITEMS AND THE ALLEGED CRIME</label>
+              <textarea id="sw-nexus" rows="5" placeholder="Your affiant submits that there is probable cause to believe that the items described above will be found at the location described because:&#10;&#10;1. On [DATE], affiant received information from [SOURCE] that...&#10;2. Affiant conducted surveillance and observed...&#10;3. Based upon affiant's training and experience in narcotics investigations..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">✍️</span><div class="form-section-title">SWORN DIGITAL SIGNATURE</div></div>
+          <div class="form-section-body">
+            <div style="background:var(--cyber-glow-xs);border:1px solid var(--border);border-radius:2px;padding:12px;margin-bottom:12px;font-size:11px;color:var(--text-secondary);line-height:1.8;">
+              Affiant swears/affirms under penalty of perjury (IC 35-44.1-2-1) that the facts contained herein are true and correct to the best of affiant's knowledge and belief.
+            </div>
+            <div id="sw-sig-box" class="sig-box" onclick="signDocument('sw')">
+              <div class="sig-text">CLICK TO DIGITALLY SIGN — SWORN UNDER PENALTY OF PERJURY</div>
+              <div style="font-size:24px;opacity:0.3;">✍</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. PURSUIT REPORT -->
+      <div id="form-PURSUIT" class="rpt-form" style="display:none;gap:12px;flex-direction:column;">
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🚔</span><div class="form-section-title">PURSUIT INITIATION</div></div>
+          <div class="form-section-body">
+            <div class="form-grid cols-3">
+              <div class="form-group"><label>INITIATING OFFICER / UNIT</label><div id="pur-officer" style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:8px 10px;font-family:var(--font-mono);font-size:13px;color:var(--cyber);letter-spacing:1px;opacity:0.8;">—</div></div>
+              <div class="form-group"><label>INITIAL REASON FOR STOP</label><input type="text" id="pur-reason" placeholder="e.g. Speeding 20 over, Ran red light, BOLO plate match"></div>
+              <div class="form-group"><label>SUSPECT VEHICLE</label><input type="text" id="pur-veh" placeholder="2020 BLK DODGE CHARGER"></div>
+              <div class="form-group"><label>PLATE # (IF OBTAINED)</label><input type="text" id="pur-plate" placeholder="ABC-1234 or UNKNOWN" style="text-transform:uppercase"></div>
+              <div class="form-group"><label>NUMBER OF OCCUPANTS</label><input type="text" id="pur-occ" placeholder="1, 2, UNKNOWN"></div>
+              <div class="form-group"><label>SUSPECT ARMED?</label>
+                <select id="pur-armed"><option>UNKNOWN</option><option>NOT BELIEVED ARMED</option><option>YES — CONFIRMED FIREARM</option><option>YES — OTHER WEAPON</option></select>
+              </div>
+              <div class="form-group"><label>PURSUIT START LOCATION</label><input type="text" id="pur-start" placeholder="Address / intersection"></div>
+              <div class="form-group"><label>PURSUIT END LOCATION</label><input type="text" id="pur-end" placeholder="Address / intersection"></div>
+              <div class="form-group"><label>APPROX. DISTANCE (MILES)</label><input type="text" id="pur-miles" placeholder="e.g. 3.2 miles"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">⏱️</span><div class="form-section-title">PURSUIT DETAILS</div></div>
+          <div class="form-section-body">
+            <div class="form-grid cols-3">
+              <div class="form-group"><label>DURATION (MINUTES)</label><input type="text" id="pur-duration" placeholder="e.g. 4 min 30 sec"></div>
+              <div class="form-group"><label>APPROX. MAX SPEED (SUSPECT)</label><input type="text" id="pur-spd-suspect" placeholder="e.g. 95 MPH"></div>
+              <div class="form-group"><label>APPROX. MAX SPEED (OFFICER)</label><input type="text" id="pur-spd-officer" placeholder="e.g. 90 MPH"></div>
+              <div class="form-group"><label>ROAD CONDITIONS</label>
+                <select id="pur-road"><option>DRY</option><option>WET</option><option>ICY</option><option>SNOW COVERED</option></select>
+              </div>
+              <div class="form-group"><label>AREA TYPE</label>
+                <select id="pur-area"><option>URBAN / CITY</option><option>SUBURBAN</option><option>RURAL / HIGHWAY</option><option>MIXED</option></select>
+              </div>
+              <div class="form-group"><label>TRAFFIC CONDITIONS</label>
+                <select id="pur-traffic"><option>LIGHT</option><option>MODERATE</option><option>HEAVY</option><option>NONE / EMPTY</option></select>
+              </div>
+              <div class="form-group full-width"><label>PARTICIPATING UNITS (BACKUP)</label><input type="text" id="pur-backup" placeholder="4A-6, 4C-1, AIR SUPPORT — list all units involved"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🛑</span><div class="form-section-title">TACTICS EMPLOYED</div></div>
+          <div class="form-section-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div>
+                <div class="form-subheader">TACTICS USED</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="pur-pit"> PIT MANEUVER ATTEMPTED</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="pur-pit-success"> PIT MANEUVER SUCCESSFUL</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="pur-spikes"> STOP STICKS / SPIKE STRIPS DEPLOYED</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="pur-spikes-success"> SPIKE STRIPS SUCCESSFUL (TIRES DEFLATED)</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="pur-air"> AIR SUPPORT REQUESTED</label>
+                  <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="pur-roadblock"> ROADBLOCK / VEHICLE CONTAINMENT</label>
+                </div>
+              </div>
+              <div>
+                <div class="form-subheader">TERMINATION</div>
+                <div class="form-group" style="margin-bottom:10px;">
+                  <label>TERMINATION REASON</label>
+                  <select id="pur-termination">
+                    <option>SUSPECT STOPPED VOLUNTARILY</option>
+                    <option>SUSPECT APPREHENDED AFTER CRASH</option>
+                    <option>PIT MANEUVER — SUSPECT STOPPED</option>
+                    <option>SPIKE STRIPS — VEHICLE DISABLED</option>
+                    <option>PURSUIT TERMINATED — SAFETY CONCERNS</option>
+                    <option>PURSUIT TERMINATED — SUPERVISOR ORDER</option>
+                    <option>SUSPECT FLED ON FOOT — APPREHENDED</option>
+                    <option>SUSPECT FLED ON FOOT — NOT APPREHENDED</option>
+                    <option>SUSPECT ESCAPED — PURSUIT ABANDONED</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>SUSPECT OUTCOME</label>
+                  <select id="pur-outcome">
+                    <option>ARRESTED / IN CUSTODY</option>
+                    <option>CITED AND RELEASED</option>
+                    <option>NOT APPREHENDED — INVESTIGATION ONGOING</option>
+                    <option>NOT APPREHENDED — CASE CLOSED</option>
+                    <option>DECEASED</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">📝</span><div class="form-section-title">PURSUIT NARRATIVE</div></div>
+          <div class="form-section-body">
+            <textarea id="pur-narrative" rows="6" placeholder="Provide a chronological account of the pursuit: initial contact, suspect's actions, route taken, tactics employed, and final resolution..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. PROPERTY / EVIDENCE LOG -->
+      <div id="form-EVIDENCE" class="rpt-form" style="display:none;gap:12px;flex-direction:column;">
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">📦</span><div class="form-section-title">CASE REFERENCE</div></div>
+          <div class="form-section-body">
+            <div class="form-grid cols-3">
+              <div class="form-group"><label>RELATED CASE / INCIDENT #</label><input type="text" id="ev-caseno" placeholder="INC-XXXXXX"></div>
+              <div class="form-group"><label>COLLECTING OFFICER</label><input type="text" id="ev-collector" value="4-ADAM-12 | SGT. R. MILLER"></div>
+              <div class="form-group"><label>COLLECTION LOCATION</label><input type="text" id="ev-location" placeholder="Scene address or property room"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🏷️</span><div class="form-section-title">EVIDENCE ITEM LOG</div></div>
+          <div class="form-section-body" id="ev-items-container">
+            <!-- items injected by JS -->
+          </div>
+          <div style="padding:10px 14px;border-top:1px solid var(--border);">
+            <button class="btn btn-primary btn-sm" onclick="addEvidenceItem()">+ ADD ITEM</button>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🔗</span><div class="form-section-title">CHAIN OF CUSTODY</div></div>
+          <div class="form-section-body">
+            <div class="form-grid">
+              <div class="form-group"><label>RECEIVED FROM (NAME / ROLE)</label><input type="text" id="ev-from" placeholder="SUBJECT NAME, WITNESS, or COLLECTED BY OFFICER"></div>
+              <div class="form-group"><label>RECEIVED BY (OFFICER / EVIDENCE TECH)</label><div id="ev-by" style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:8px 10px;font-family:var(--font-mono);font-size:13px;color:var(--cyber);letter-spacing:1px;opacity:0.8;">—</div></div>
+              <div class="form-group"><label>STORAGE LOCATION</label>
+                <select id="ev-storage">
+                  <option>EVIDENCE ROOM — PRIMARY</option><option>EVIDENCE ROOM — SECURED LOCKER</option>
+                  <option>EVIDENCE ROOM — REFRIGERATED</option><option>EVIDENCE ROOM — FIREARMS VAULT</option>
+                  <option>IMPOUND LOT</option><option>CRIME LAB — SUBMITTED</option><option>FIELD RELEASE TO OWNER</option>
+                </select>
+              </div>
+              <div class="form-group"><label>SUBMITTING TO CRIME LAB?</label>
+                <select id="ev-lab"><option>NO</option><option>YES — DNA ANALYSIS</option><option>YES — FINGERPRINTS</option>
+                  <option>YES — DRUG ANALYSIS (GCMS)</option><option>YES — FIREARMS / BALLISTICS</option>
+                  <option>YES — DIGITAL FORENSICS</option><option>YES — BLOOD / TOXICOLOGY</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. SUPPLEMENTAL REPORT -->
+      <div id="form-SUPPLEMENT" class="rpt-form" style="display:none;gap:12px;flex-direction:column;">
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">📎</span><div class="form-section-title">ORIGINAL REPORT REFERENCE</div></div>
+          <div class="form-section-body">
+            <div class="form-grid cols-3">
+              <div class="form-group"><label>ORIGINAL CASE / INCIDENT #</label><input type="text" id="sup-caseno" placeholder="INC-XXXXXX (REQUIRED)"></div>
+              <div class="form-group"><label>ORIGINAL REPORT DATE</label><input type="date" id="sup-orig-date"></div>
+              <div class="form-group"><label>ORIGINAL REPORTING OFFICER</label><input type="text" id="sup-orig-officer" placeholder="Officer who filed original report"></div>
+              <div class="form-group"><label>SUBJECT OF ORIGINAL REPORT</label><input type="text" id="sup-subject" placeholder="LAST, FIRST MI"></div>
+              <div class="form-group"><label>ORIGINAL OFFENSE / CHARGE</label><input type="text" id="sup-offense" placeholder="IC XX-XX-X-X — Offense Name"></div>
+              <div class="form-group"><label>SUPPLEMENT #</label><input type="text" id="sup-num" placeholder="e.g. SUPP-1, SUPP-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">🗂️</span><div class="form-section-title">REASON FOR SUPPLEMENT</div></div>
+          <div class="form-section-body">
+            <div style="display:flex;gap:16px;flex-wrap:wrap;padding:4px 0 12px;">
+              <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="sup-r-evidence"> NEW EVIDENCE DISCOVERED</label>
+              <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="sup-r-arrest"> ARREST MADE</label>
+              <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="sup-r-witness"> NEW WITNESS / STATEMENT</label>
+              <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="sup-r-correction"> CORRECTION TO ORIGINAL REPORT</label>
+              <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="sup-r-lab"> LAB RESULTS RECEIVED</label>
+              <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="sup-r-followup"> FOLLOW-UP INVESTIGATION</label>
+              <label class="checkbox-label" style="display:flex;gap:8px;align-items:center;cursor:pointer;"><input type="checkbox" id="sup-r-other"> OTHER</label>
+            </div>
+            <div class="form-group">
+              <label>SUMMARY OF REASON (IF CORRECTION, STATE ORIGINAL ENTRY AND CORRECTED ENTRY)</label>
+              <input type="text" id="sup-reason-summary" placeholder="Brief description of what is being added or corrected...">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-header"><span class="section-icon">📝</span><div class="form-section-title">ADDITIONAL NARRATIVE</div></div>
+          <div class="form-section-body">
+            <textarea id="sup-narrative" rows="8" placeholder="On [DATE], this officer conducted a follow-up / received information / made the following correction:&#10;&#10;[Detail the new information, evidence, witness statements, or corrections to the original report. Reference specific sections or statements from the original report when making corrections.]&#10;&#10;This information is being submitted as a supplement to original report [INC-XXXXXX]."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBMIT BAR -->
+      <div id="rpt-submit-bar" style="display:none;gap:10px;align-items:center;flex-shrink:0;">
+        <button class="btn btn-primary" onclick="submitReport()" style="font-size:13px;padding:12px 30px;">▲ SUBMIT TO NCIC</button>
+        <button class="btn btn-danger btn-sm" onclick="clearReportForm()">✕ CLEAR FORM</button>
+        <span id="form-status" style="font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-left:auto;"></span>
+      </div>
+    </div>
+
+    <!-- ── DATABASE TAB ── -->
+    <div class="tab-panel" id="tab-database">
+      <div class="panel-header">
+        <div class="panel-title">INCIDENT DATABASE</div>
+        <div class="panel-subtitle" id="db-count-label">0 RECORDS</div>
+      </div>
+
+      <div class="db-stat-row" id="db-stats"></div>
+
+      <div class="card" style="flex:1;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div class="card-title" style="margin-bottom:0;">LOCAL INCIDENT LOG</div>
+          <input type="text" id="db-filter" placeholder="Filter records..." style="max-width:220px;font-size:11px;padding:5px 8px;" oninput="renderDatabase()">
+          <button class="btn btn-danger btn-sm" style="margin-left:auto;" onclick="clearAllData()">✕ PURGE ALL</button>
+        </div>
+        <div id="incident-log"></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div>
+
+<!-- ══ MIRANDA / LEGAL REFERENCE MODAL ══════════════════════ -->
+<div id="miranda-modal" class="modal-overlay" onclick="closeModalOutside(event,'miranda-modal')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span style="font-size:16px;">⚖️</span>
+      <div class="modal-title">LEGAL REFERENCE CARDS</div>
+      <button class="modal-close" onclick="closeModal('miranda-modal')">✕ CLOSE</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- MIRANDA RIGHTS CARD -->
+      <div class="lam-card">
+        <div class="lam-header">
+          <div class="lam-agency">RIVER CITY POLICE DEPARTMENT · LCSO</div>
+          <div class="lam-card-title">MIRANDA WARNING</div>
+          <div class="lam-card-subtitle">REQUIRED PRIOR TO CUSTODIAL INTERROGATION · MIRANDA v. ARIZONA, 384 U.S. 436 (1966)</div>
+        </div>
+
+        <div class="lam-section-title">STANDARD ADVISEMENT</div>
+        <div class="lam-body">
+          <p>You have the <strong>right to remain silent.</strong></p>
+          <p>Anything you say <strong>can and will be used against you</strong> in a court of law.</p>
+          <p>You have the <strong>right to an attorney.</strong></p>
+          <p>If you cannot afford an attorney, <strong>one will be appointed for you</strong> before any questioning if you wish.</p>
+        </div>
+
+        <div class="lam-section-title">WAIVER QUESTIONS — MUST BE ASKED</div>
+
+        <div class="lam-question">Q1 — Do you understand each of these rights as I have explained them to you?</div>
+        <div class="lam-answer">Wait for affirmative verbal response. Document answer.</div>
+
+        <div class="lam-question">Q2 — Having these rights in mind, do you wish to talk to me now?</div>
+        <div class="lam-answer">Wait for affirmative verbal response. Document answer.<br>If subject invokes — <strong>STOP ALL QUESTIONING IMMEDIATELY.</strong></div>
+
+        <div class="lam-section-title">INVOCATION — OFFICER ACTION REQUIRED</div>
+        <div class="lam-body">
+          <p>If subject states <em>"I want a lawyer"</em> or <em>"I'm not talking"</em> — <strong>cease all interrogation.</strong></p>
+          <p>Note time, exact words used, and document in narrative.</p>
+          <p>Re-initiation may only occur if subject voluntarily re-approaches officer.</p>
+        </div>
+
+        <div class="lam-warning-box">
+          ⚠ NOTE: Miranda applies to CUSTODIAL interrogation only. Roadside questions during a traffic stop generally do not require Miranda advisement unless subject is under arrest. Consult your agency's legal advisor for specific guidance.
+        </div>
+
+        <div class="lam-badge-number">FORM: RCPD-LEG-001 · REV. 2024</div>
+      </div>
+
+      <!-- IMPLIED CONSENT CARD -->
+      <div class="lam-card">
+        <div class="lam-header">
+          <div class="lam-agency">STATE OF INDIANA — IC 9-30-6</div>
+          <div class="lam-card-title">IMPLIED CONSENT WARNING</div>
+          <div class="lam-card-subtitle">OPERATING WHILE INTOXICATED · REQUIRED ADVISEMENT BEFORE CHEMICAL TEST</div>
+        </div>
+
+        <div class="lam-section-title">INDIANA STATUTORY ADVISEMENT</div>
+        <div class="lam-body">
+          <p>I am a law enforcement officer. I have probable cause to believe you have operated a vehicle while intoxicated.</p>
+          <p>Indiana law requires you to submit to a chemical test or tests to determine the presence of alcohol, controlled substances, or other drugs.</p>
+          <p>You may choose to take a <strong>breath test, blood test, or urine test,</strong> or any combination of these tests.</p>
+        </div>
+
+        <div class="lam-section-title">REFUSAL CONSEQUENCES — READ VERBATIM</div>
+        <div class="lam-body">
+          <p>If you <strong>refuse to submit</strong> to a chemical test, your driver's license will be suspended for <strong>one (1) year</strong> under IC 9-30-6-9.</p>
+          <p>Your refusal <strong>may be used as evidence</strong> against you in a criminal prosecution.</p>
+          <p>A test may still be administered <strong>without your consent</strong> if exigent circumstances exist or a warrant is obtained.</p>
+        </div>
+
+        <div class="lam-section-title">OFFICER CHECKLIST</div>
+        <div class="lam-body">
+          <p>☐ &nbsp; Advisement read verbatim and documented</p>
+          <p>☐ &nbsp; Subject response noted (Consented / Refused / Unable)</p>
+          <p>☐ &nbsp; Test type selected: ____________________</p>
+          <p>☐ &nbsp; Test administered by: ____________________</p>
+          <p>☐ &nbsp; Result: __________ BAC / Time: __________</p>
+          <p>☐ &nbsp; DS-50 / Breath Test Certificate completed</p>
+          <p>☐ &nbsp; If refused — OWI Probable Cause Affidavit filed</p>
+        </div>
+
+        <div class="lam-warning-box">
+          ⚠ REFUSAL ACTION: If subject refuses, note time of refusal, complete your agency's implied consent refusal form, and submit to the BMV within 24 hours. Obtain warrant if blood draw is authorized under your department policy.
+        </div>
+
+        <div class="lam-badge-number">IC 9-30-6-2 · IC 9-30-6-9 · FORM: RCPD-LEG-002 · REV. 2024</div>
+      </div>
+
+      <!-- USE OF FORCE CARD -->
+      <div class="lam-card">
+        <div class="lam-header">
+          <div class="lam-agency">FORCE CONTINUUM REFERENCE</div>
+          <div class="lam-card-title">INDIANA USE OF FORCE</div>
+          <div class="lam-card-subtitle">IC 35-41-3-3 · OFFICER MUST ONLY USE FORCE REASONABLE UNDER CIRCUMSTANCES</div>
+        </div>
+
+        <div class="lam-section-title">FORCE LEVELS — ESCALATING</div>
+        <div class="lam-body">
+          <p><strong>1. Officer Presence</strong> — Uniform, marked vehicle, calm demeanor.</p>
+          <p><strong>2. Verbal Commands</strong> — Clear, direct instructions. Identify self.</p>
+          <p><strong>3. Soft Control</strong> — Escort grip, joint compliance, open-hand techniques.</p>
+          <p><strong>4. Less-Lethal</strong> — Taser/CEW, OC spray, impact weapon, K-9.</p>
+          <p><strong>5. Deadly Force</strong> — Only when subject poses imminent threat of death or serious bodily injury to officer or others.</p>
+        </div>
+
+        <div class="lam-section-title">DEADLY FORCE STANDARD — IC 35-41-3-3</div>
+        <div class="lam-body">
+          <p>Justified when officer reasonably believes force is necessary to prevent death or serious bodily injury to self or third party.</p>
+          <p><strong>De-escalation required</strong> when tactically feasible before escalating force.</p>
+        </div>
+
+        <div class="lam-warning-box">
+          ⚠ POST-FORCE: Any use of force beyond handcuffing requires a Use of Force Report. Supervisor notification mandatory. All Taser deployments require documentation of cartridge serial number and dart contact points.
+        </div>
+
+        <div class="lam-badge-number">FORM: RCPD-LEG-003 · IC 35-41-3-3</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ CODE SEARCH MODAL ══════════════════════════════════════ -->
+<div id="codes-modal" class="modal-overlay" onclick="closeModalOutside(event,'codes-modal')">
+  <div class="modal-box" style="width:760px;">
+    <div class="modal-header">
+      <span style="font-size:16px;">📻</span>
+      <div class="modal-title">NCIC / RADIO CODE REFERENCE</div>
+      <button class="modal-close" onclick="closeModal('codes-modal')">✕ CLOSE</button>
+    </div>
+    <div class="modal-body">
+      <div class="code-search-bar">
+        <input type="text" id="code-search-input" placeholder="Search code or description... (e.g. 10-4, Signal 10, pursuit)" oninput="filterCodes()">
+      </div>
+      <div class="code-tabs">
+        <button class="code-tab-btn active" onclick="switchCodeTab('10codes',this)">10-CODES</button>
+        <button class="code-tab-btn" onclick="switchCodeTab('signals',this)">SIGNAL CODES</button>
+        <button class="code-tab-btn" onclick="switchCodeTab('all',this)">ALL CODES</button>
+      </div>
+      <div id="codes-table-container"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NCIC LOADER OVERLAY -->
+<div id="ncic-loader">
+  <div class="loader-spinner">
+    <div class="spinner-ring"></div>
+    <div class="spinner-ring"></div>
+    <div class="spinner-ring"></div>
+  </div>
+  <div class="loader-title">UPLOADING TO NCIC...</div>
+  <div class="loader-bar-track"><div class="loader-bar" id="loader-bar"></div></div>
+  <div class="loader-msg" id="loader-msg">ESTABLISHING SECURE CHANNEL...</div>
+</div>
+
+<!-- TOAST -->
+<div id="toast">✔ INCIDENT SAVED TO DATABASE</div>
+
+<script src="mdt.js"></script>
+</body>
+</html>
