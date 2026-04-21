@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1314,6 +1313,190 @@
 
   .topbar-officer-block { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
 
+  /* ── AGENCY TOGGLE ───────────────────────────── */
+  .agency-toggle {
+    display: flex;
+    border: 1px solid var(--border-bright);
+    border-radius: 2px;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 2px;
+  }
+
+  .agency-toggle-btn {
+    flex: 1;
+    padding: 9px 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    text-align: center;
+    position: relative;
+  }
+
+  .agency-toggle-btn:not(:last-child) {
+    border-right: 1px solid var(--border-bright);
+  }
+
+  .agency-toggle-btn.active {
+    background: rgba(0,180,255,0.12);
+    color: var(--cyber);
+  }
+
+  .agency-toggle-btn.active.sheriff {
+    background: rgba(255,184,0,0.1);
+    color: var(--accent-amber);
+  }
+
+  /* seal swap — police vs sheriff */
+  .seal-pd  { display: block; }
+  .seal-so  { display: none;  }
+  body.agency-sheriff .seal-pd { display: none;  }
+  body.agency-sheriff .seal-so { display: block; }
+
+  /* sheriff star seal */
+  .sheriff-star-svg { width: 60px; height: 60px; }
+
+  /* ── LIVE CAD SIDEBAR BOX ─────────────────────── */
+  #live-cad-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .cad-header {
+    background: rgba(0,180,255,0.05);
+    border-bottom: 1px solid var(--border);
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cad-header-title {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--cyber);
+  }
+
+  .cad-live-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    box-shadow: 0 0 5px var(--accent-green);
+    animation: pulse-dot 1.4s ease-in-out infinite;
+    margin-left: auto;
+  }
+
+  @keyframes pulse-dot {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.3; }
+  }
+
+  .cad-feed {
+    max-height: 260px;
+    overflow-y: auto;
+    padding: 4px 0;
+  }
+
+  .cad-call {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: relative;
+    animation: cadSlideIn 0.3s ease forwards;
+  }
+
+  @keyframes cadSlideIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .cad-call.pri-1 { border-left: 2px solid var(--accent-red); }
+  .cad-call.pri-2 { border-left: 2px solid var(--accent-amber); }
+  .cad-call.pri-3 { border-left: 2px solid var(--cyber-dim); }
+
+  .cad-call-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cad-pri {
+    font-family: var(--font-ui);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 1px 5px;
+    border-radius: 1px;
+  }
+
+  .cad-pri-1 { background: rgba(255,59,92,0.15); color: var(--accent-red); }
+  .cad-pri-2 { background: rgba(255,184,0,0.12); color: var(--accent-amber); }
+  .cad-pri-3 { background: rgba(0,180,255,0.08); color: var(--cyber); }
+
+  .cad-type {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.5px;
+    flex: 1;
+  }
+
+  .cad-dismiss {
+    background: none;
+    border: 1px solid rgba(255,59,92,0.25);
+    border-radius: 1px;
+    color: rgba(255,59,92,0.5);
+    font-family: var(--font-ui);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 1px 5px;
+    cursor: pointer;
+    transition: all 0.12s;
+    flex-shrink: 0;
+  }
+
+  .cad-dismiss:hover { border-color: var(--accent-red); color: var(--accent-red); }
+
+  .cad-addr {
+    font-size: 10px;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+    padding-left: 2px;
+  }
+
+  .cad-meta {
+    display: flex;
+    gap: 8px;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+    padding-left: 2px;
+  }
+
+  .cad-empty {
+    padding: 16px 10px;
+    text-align: center;
+    font-family: var(--font-ui);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+  }
+
   .empty-state .empty-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
 </style>
 </head>
@@ -1325,34 +1508,61 @@
 
   <div class="login-box">
 
-    <!-- Dept Seal -->
-    <div class="dept-seal">
+    <!-- AGENCY TOGGLE -->
+    <div class="agency-toggle" style="margin-bottom:20px;">
+      <button class="agency-toggle-btn active" id="toggle-pd" onclick="selectAgency('PD')">🏛 POLICE DEPT</button>
+      <button class="agency-toggle-btn" id="toggle-so" onclick="selectAgency('SO')">⭐ SHERIFF'S OFFICE</button>
+    </div>
+
+    <!-- POLICE DEPT SEAL -->
+    <div class="dept-seal seal-pd">
       <div class="seal-ring-outer"></div>
       <div class="seal-ring-inner"></div>
       <svg class="seal-text-ring" viewBox="0 0 110 110">
         <defs>
-          <path id="seal-arc-top" d="M 55,55 m -38,0 a 38,38 0 1,1 76,0" />
-          <path id="seal-arc-bot" d="M 55,55 m -34,0 a 34,34 0 0,0 68,0" />
+          <path id="seal-arc-top-pd" d="M 55,55 m -38,0 a 38,38 0 1,1 76,0" />
+          <path id="seal-arc-bot-pd" d="M 55,55 m -34,0 a 34,34 0 0,0 68,0" />
         </defs>
         <text font-family="'Rajdhani',sans-serif" font-size="7.5" font-weight="700" fill="#006899" letter-spacing="2.8">
-          <textPath href="#seal-arc-top">RIVER CITY POLICE DEPARTMENT</textPath>
+          <textPath href="#seal-arc-top-pd">RIVER CITY POLICE DEPARTMENT</textPath>
         </text>
         <text font-family="'Rajdhani',sans-serif" font-size="7" font-weight="600" fill="#006899" letter-spacing="2">
-          <textPath href="#seal-arc-bot" startOffset="14%">EST. 1987 · LIBERTY CO.</textPath>
+          <textPath href="#seal-arc-bot-pd" startOffset="14%">EST. 1987 · LIBERTY CO.</textPath>
+        </text>
+      </svg>
+      <div class="seal-center"><span style="font-size:32px;line-height:1;">🏛</span></div>
+    </div>
+
+    <!-- SHERIFF'S OFFICE SEAL -->
+    <div class="dept-seal seal-so" style="margin-bottom:20px;">
+      <div class="seal-ring-outer" style="border-color:#996600;box-shadow:0 0 18px rgba(255,184,0,0.2),inset 0 0 18px rgba(255,184,0,0.06);"></div>
+      <div class="seal-ring-inner" style="border-color:rgba(255,184,0,0.3);background:rgba(255,184,0,0.04);"></div>
+      <svg class="seal-text-ring" viewBox="0 0 110 110">
+        <defs>
+          <path id="seal-arc-top-so" d="M 55,55 m -38,0 a 38,38 0 1,1 76,0" />
+          <path id="seal-arc-bot-so" d="M 55,55 m -34,0 a 34,34 0 0,0 68,0" />
+        </defs>
+        <text font-family="'Rajdhani',sans-serif" font-size="7" font-weight="700" fill="#996600" letter-spacing="2.2">
+          <textPath href="#seal-arc-top-so">LIBERTY COUNTY SHERIFF'S OFFICE</textPath>
+        </text>
+        <text font-family="'Rajdhani',sans-serif" font-size="7" font-weight="600" fill="#996600" letter-spacing="2">
+          <textPath href="#seal-arc-bot-so" startOffset="14%">EST. 1954 · LIBERTY CO.</textPath>
         </text>
       </svg>
       <div class="seal-center">
-        <span class="seal-star">⭐</span>
+        <svg width="38" height="38" viewBox="0 0 38 38">
+          <polygon points="19,2 23.5,13 35.5,13 26,20.5 29.5,32 19,25 8.5,32 12,20.5 2.5,13 14.5,13" fill="none" stroke="#ffb800" stroke-width="1.5"/>
+          <polygon points="19,7 22,15 30.5,15 23.5,20 26,28 19,23.5 12,28 14.5,20 7.5,15 16,15" fill="rgba(255,184,0,0.12)" stroke="#ffb800" stroke-width="0.8"/>
+        </svg>
       </div>
     </div>
 
-    <div class="login-agency">METRO PD</div>
-    <div class="login-sub">RIVER CITY POLICE DEPARTMENT</div>
+    <div class="login-agency" id="login-agency-name">METRO PD</div>
+    <div class="login-sub" id="login-agency-sub">RIVER CITY POLICE DEPARTMENT</div>
     <div class="login-sub" style="font-size:8px;letter-spacing:6px;margin-top:2px;color:var(--text-dim);">LIBERTY COUNTY · INDIANA</div>
 
     <div class="login-divider"></div>
-
-    <div class="login-system-label">◆ SECURE MDT ACCESS — OFFICER SIGN-ON ◆</div>
+    <div class="login-system-label" id="login-system-label">◆ SECURE MDT ACCESS — OFFICER SIGN-ON ◆</div>
 
     <div class="login-form">
       <div class="login-field">
@@ -1360,11 +1570,11 @@
         <input type="text" id="login-name" placeholder="e.g. SGT. R. MILLER" autocomplete="off" onkeydown="if(event.key==='Enter')document.getElementById('login-callsign').focus()">
       </div>
       <div class="login-field">
-        <label>UNIT / CALLSIGN</label>
+        <label id="callsign-label">UNIT / CALLSIGN</label>
         <input type="text" id="login-callsign" placeholder="e.g. 4-ADAM-12" autocomplete="off" style="text-transform:uppercase;" onkeydown="if(event.key==='Enter')signOn()">
       </div>
       <div class="login-error" id="login-error"></div>
-      <button class="login-btn" onclick="signOn()">▶ &nbsp; SIGN ON DUTY</button>
+      <button class="login-btn" id="login-btn" onclick="signOn()">▶ &nbsp; SIGN ON DUTY</button>
     </div>
 
     <div class="login-session-info">
@@ -1396,8 +1606,8 @@
       <path d="M8 13L24 13" stroke="rgba(0,180,255,0.3)" stroke-width="0.5"/>
     </svg>
     <div>
-      <div class="agency-name">METRO PD</div>
-      <div class="agency-sub">MOBILE DATA TERMINAL</div>
+      <div class="agency-name" id="topbar-agency-name">METRO PD</div>
+      <div class="agency-sub" id="topbar-agency-sub">MOBILE DATA TERMINAL</div>
     </div>
   </div>
 
@@ -1444,6 +1654,17 @@
     <button class="nav-btn" onclick="switchTab('database', this)">
       <span class="nav-icon">🗄️</span> DATABASE
     </button>
+
+    <!-- LIVE CAD FEED -->
+    <div id="live-cad-box" style="margin:8px 8px 0;">
+      <div class="cad-header">
+        <div class="cad-header-title">LIVE CAD</div>
+        <div class="cad-live-dot"></div>
+      </div>
+      <div class="cad-feed" id="cad-feed">
+        <div class="cad-empty">AWAITING CALLS...</div>
+      </div>
+    </div>
 
     <div class="nav-footer" id="nav-footer-session">
       SYS v4.2.1<br>
@@ -2258,31 +2479,112 @@ function saveIncidents(arr) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
 }
 
-// ── SESSION ────────────────────────────────────
+// ── SESSION & AGENCY ───────────────────────────
+const AGENCY_CONFIG = {
+  PD: {
+    short:    'RCPD',
+    long:     'RIVER CITY POLICE DEPARTMENT',
+    topbar:   'METRO PD',
+    sub:      'MOBILE DATA TERMINAL',
+    loginName:'METRO PD',
+    loginSub: 'RIVER CITY POLICE DEPARTMENT',
+    sysLabel: '◆ SECURE MDT ACCESS — OFFICER SIGN-ON ◆',
+    csLabel:  'UNIT / CALLSIGN',
+    csHint:   'e.g. 4-ADAM-12',
+    btnText:  '▶ &nbsp; SIGN ON DUTY',
+    bodyClass:'agency-pd'
+  },
+  SO: {
+    short:    'LCSO',
+    long:     'LIBERTY COUNTY SHERIFF\'S OFFICE',
+    topbar:   'LCSO',
+    sub:      'MOBILE DATA TERMINAL',
+    loginName:'LCSO',
+    loginSub: 'LIBERTY COUNTY SHERIFF\'S OFFICE',
+    sysLabel: '◆ SECURE MDT ACCESS — DEPUTY SIGN-ON ◆',
+    csLabel:  'DISTRICT / CALLSIGN',
+    csHint:   'e.g. KING-31',
+    btnText:  '▶ &nbsp; SIGN ON DUTY',
+    bodyClass:'agency-sheriff'
+  }
+};
+
+let selectedAgency = 'PD';
+
+function selectAgency(agency) {
+  selectedAgency = agency;
+  const cfg = AGENCY_CONFIG[agency];
+
+  // Toggle buttons
+  document.getElementById('toggle-pd').classList.toggle('active', agency === 'PD');
+  document.getElementById('toggle-pd').classList.remove('sheriff');
+  document.getElementById('toggle-so').classList.toggle('active', agency === 'SO');
+  if (agency === 'SO') document.getElementById('toggle-so').classList.add('sheriff');
+
+  // Swap seals via body class
+  document.body.classList.remove('agency-pd','agency-sheriff');
+  document.body.classList.add(agency === 'SO' ? 'agency-sheriff' : 'agency-pd');
+
+  // Update login text
+  document.getElementById('login-agency-name').textContent = cfg.loginName;
+  document.getElementById('login-system-label').textContent = cfg.sysLabel;
+
+  const subEl = document.getElementById('login-agency-sub');
+  if (subEl) subEl.textContent = cfg.loginSub;
+
+  const csLabel = document.getElementById('callsign-label');
+  if (csLabel) csLabel.textContent = cfg.csLabel;
+
+  const csInput = document.getElementById('login-callsign');
+  if (csInput) csInput.placeholder = cfg.csHint;
+
+  const btn = document.getElementById('login-btn');
+  if (btn) btn.innerHTML = cfg.btnText;
+
+  // Update seal ring colors for sheriff
+  document.querySelectorAll('.seal-ring-outer').forEach((r, i) => {
+    if (i === 0) r.style.borderColor = agency === 'SO' ? '#996600' : '';
+  });
+}
+
 function getOfficerStr() {
   const name = sessionStorage.getItem('mdt_officer_name') || '—';
   const cs   = sessionStorage.getItem('mdt_callsign') || '—';
-  return `${cs.toUpperCase()} | ${name.toUpperCase()}`;
+  const ag   = sessionStorage.getItem('mdt_agency') || 'PD';
+  const short = AGENCY_CONFIG[ag]?.short || 'RCPD';
+  return `${short} | ${cs.toUpperCase()} | ${name.toUpperCase()}`;
 }
 
 function updateOfficerDisplays() {
-  const str = getOfficerStr();
-  const name = (sessionStorage.getItem('mdt_officer_name') || '—').toUpperCase();
-  const cs   = (sessionStorage.getItem('mdt_callsign') || '—').toUpperCase();
+  const name  = (sessionStorage.getItem('mdt_officer_name') || '—').toUpperCase();
+  const cs    = (sessionStorage.getItem('mdt_callsign') || '—').toUpperCase();
+  const ag    = sessionStorage.getItem('mdt_agency') || 'PD';
+  const cfg   = AGENCY_CONFIG[ag] || AGENCY_CONFIG.PD;
+  const str   = getOfficerStr();
 
-  // Topbar
+  // Topbar agency name + officer line
   const tb = document.getElementById('topbar-officer-display');
-  if (tb) tb.textContent = `UNIT ${cs}  |  ${name}`;
+  if (tb) tb.textContent = `${cfg.short} | ${cs} | ${name}`;
+
+  const tan = document.getElementById('topbar-agency-name');
+  if (tan) tan.textContent = cfg.topbar;
+
+  const tas = document.getElementById('topbar-agency-sub');
+  if (tas) tas.textContent = cfg.sub;
 
   // Nav footer
   const nf = document.getElementById('nav-footer-session');
-  if (nf) nf.innerHTML = `SYS v4.2.1<br>ENCRYPTED<br>SHIFT: DAY<br><br><span style="color:var(--cyber);letter-spacing:0;">${cs}</span><br><span style="font-size:9px;">${name}</span>`;
+  if (nf) nf.innerHTML = `SYS v4.2.1<br>ENCRYPTED<br>SHIFT: DAY<br><br><span style="color:var(--cyber);letter-spacing:0;">${cfg.short} — ${cs}</span><br><span style="font-size:9px;">${name}</span>`;
 
-  // All officer display divs
+  // All officer display divs in forms
   ['inc-officer','pca-affiant','sw-affiant','pur-officer','ev-by'].forEach(id => {
     const el = document.getElementById(id);
     if (el && el.tagName !== 'INPUT') el.textContent = str;
   });
+
+  // Apply sheriff body class if needed
+  document.body.classList.remove('agency-pd','agency-sheriff');
+  document.body.classList.add(ag === 'SO' ? 'agency-sheriff' : 'agency-pd');
 }
 
 function signOn() {
@@ -2298,26 +2600,33 @@ function signOn() {
 
   sessionStorage.setItem('mdt_officer_name', name);
   sessionStorage.setItem('mdt_callsign', cs.toUpperCase());
+  sessionStorage.setItem('mdt_agency', selectedAgency);
 
   document.getElementById('login-overlay').classList.add('hidden');
   updateOfficerDisplays();
   renderDispatch();
+  startAmbientCAD();
 }
 
 function signOff() {
   if (!confirm('SIGN OFF DUTY?\n\nThis will end your current session.')) return;
   sessionStorage.removeItem('mdt_officer_name');
   sessionStorage.removeItem('mdt_callsign');
-  // Reset officer displays
+  sessionStorage.removeItem('mdt_agency');
+  stopAmbientCAD();
+
   ['inc-officer','pca-affiant','sw-affiant','pur-officer','ev-by'].forEach(id => {
     const el = document.getElementById(id);
     if (el && el.tagName !== 'INPUT') el.textContent = '—';
   });
   document.getElementById('topbar-officer-display').textContent = 'UNIT —  |  —';
-  // Show login again
+  document.getElementById('topbar-agency-name').textContent = 'METRO PD';
+
+  // Reset login form
   document.getElementById('login-name').value = '';
   document.getElementById('login-callsign').value = '';
   document.getElementById('login-error').textContent = '';
+  selectAgency('PD');
   document.getElementById('login-overlay').classList.remove('hidden');
 }
 
@@ -2331,27 +2640,6 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 updateClock();
-
-// ── PAGE INIT — SESSION CHECK ──────────────────
-(function() {
-  // Set default date/time on the form
-  const now = new Date();
-  const di = document.getElementById('inc-date');
-  const ti = document.getElementById('inc-time');
-  if (di) di.value = now.toISOString().slice(0,10);
-  if (ti) ti.value = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-
-  // Check for existing session
-  const savedName = sessionStorage.getItem('mdt_officer_name');
-  const savedCs   = sessionStorage.getItem('mdt_callsign');
-
-  if (savedName && savedCs) {
-    // Valid session — skip login, populate displays
-    document.getElementById('login-overlay').classList.add('hidden');
-    updateOfficerDisplays();
-  }
-  // else: overlay stays visible (default state)
-})();
 
 // ── TAB NAVIGATION ────────────────────────────
 function switchTab(tab, btn) {
@@ -2438,6 +2726,151 @@ function renderDispatch() {
 }
 
 renderDispatch();
+
+// ── AMBIENT CAD SIMULATOR ──────────────────────
+const CAD_CALL_TYPES = [
+  { code:'10-50',   desc:'Major Traffic Accident',              pri:1 },
+  { code:'10-50 PDO',desc:'Traffic Accident — Property Damage Only', pri:2 },
+  { code:'10-11',   desc:'Dog Complaint / Animal At Large',     pri:3 },
+  { code:'10-16',   desc:'Domestic Disturbance',                pri:1 },
+  { code:'10-31',   desc:'Crime in Progress',                   pri:1 },
+  { code:'10-32',   desc:'Person with a Weapon',                pri:1 },
+  { code:'10-33',   desc:'Emergency — Officer Needs Assistance',pri:1 },
+  { code:'10-35',   desc:'Major Crime Alert',                   pri:1 },
+  { code:'10-54',   desc:'Suspicious Vehicle',                  pri:2 },
+  { code:'10-55',   desc:'Intoxicated Driver',                  pri:2 },
+  { code:'10-65',   desc:'Missing Person Report',               pri:2 },
+  { code:'10-70',   desc:'Fire Alarm / Structure Fire',         pri:2 },
+  { code:'10-90',   desc:'Alarm — Business',                    pri:2 },
+  { code:'10-91',   desc:'Alarm — Residential',                 pri:3 },
+  { code:'911 HANG',desc:'911 Hangup / No Response',            pri:2 },
+  { code:'WELFARE', desc:'Welfare Check',                       pri:3 },
+  { code:'NOISE',   desc:'Noise Complaint',                     pri:3 },
+  { code:'THEFT',   desc:'Theft / Shoplifting in Progress',     pri:2 },
+  { code:'BURGLARY',desc:'Burglary in Progress',                pri:1 },
+  { code:'ROBBERY', desc:'Armed Robbery',                       pri:1 },
+  { code:'PURSUIT', desc:'Vehicle Pursuit in Progress',         pri:1 },
+  { code:'OD/MED',  desc:'Medical — Possible Overdose',         pri:1 },
+  { code:'SHOTS',   desc:'Shots Fired / ShotSpotter Alert',     pri:1 },
+  { code:'TRESPASS',desc:'Trespassing / Unwanted Subject',      pri:3 },
+  { code:'VAND',    desc:'Vandalism in Progress',               pri:3 },
+];
+
+const CAD_LOCATIONS = [
+  'River City Gas Station — Rt. 1 & Main',
+  'Grain Terminal — Industrial Way',
+  'Paleto Way & 3rd St',
+  'Central Mall — West Entrance',
+  'Springfield Motel — Hwy 40',
+  'Liberty County Fairgrounds',
+  'Rockland Avenue Bridge',
+  'Westbrook Trailer Park',
+  'Coliseum Boulevard & Oak',
+  'River City Bank — Market St',
+  'Sunrise Apartments — Ohio St',
+  'Eagle Construction Site — N. Maple',
+  'Liberty Diner — Route 9',
+  'Lake View Park — Shoreline Rd',
+  'Old Sawmill Road — Rural',
+  'Springfield High School',
+  'County Road 7 & Hwy 40',
+  'River City Hospital — ER Entrance',
+  '400 Blk Delaware St',
+  'Downtown Parking Garage — Level 2',
+  'Valley Transit Hub — Springfield',
+  'Post Office — River City Center',
+];
+
+const CAD_UNITS = [
+  '4-ADAM-6','4-ADAM-9','4-ADAM-20','4-ADAM-15',
+  '4-BAKER-3','4-BAKER-7','4-CHARLIE-1','4-CHARLIE-4',
+  '1-LINCOLN-5','1-LINCOLN-8','1-KING-2',
+  'KING-31','KING-14','KING-22',
+  'AIR-1','K9-2','SGT-4',
+];
+
+let cadCalls  = [];
+let cadTimer  = null;
+let cadIdCtr  = 450;
+
+function cadRand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function cadNowStr() {
+  const n = new Date();
+  return String(n.getHours()).padStart(2,'0') + ':' +
+         String(n.getMinutes()).padStart(2,'0') + ':' +
+         String(n.getSeconds()).padStart(2,'0');
+}
+
+function generateAmbientCall() {
+  const call  = cadRand(CAD_CALL_TYPES);
+  const loc   = cadRand(CAD_LOCATIONS);
+  const unit  = cadRand(CAD_UNITS);
+  const unit2 = Math.random() > 0.6 ? ', ' + cadRand(CAD_UNITS) : '';
+  cadIdCtr++;
+  const uid = Date.now() + '_' + Math.floor(Math.random()*9999);
+
+  const entry = { id:'CAD-'+cadIdCtr, code:call.code, desc:call.desc,
+                  loc, unit:unit+unit2, pri:call.pri, ts:cadNowStr(), uid };
+
+  cadCalls.unshift(entry);
+  if (cadCalls.length > 20) cadCalls.pop();
+  renderCADFeed();
+
+  // Flash P1 calls on BOLO ticker
+  if (call.pri === 1) {
+    const ticker = document.getElementById('boloTicker');
+    if (ticker) {
+      const flash = `⚡ P1 — ${call.code}: ${call.desc.toUpperCase()} AT ${loc.toUpperCase()} — UNIT: ${unit.toUpperCase()}`;
+      ticker.innerHTML = flash + ' &nbsp;&nbsp;&nbsp; ◆ &nbsp;&nbsp;&nbsp; ' + ticker.innerHTML;
+    }
+  }
+}
+
+function renderCADFeed() {
+  const feed = document.getElementById('cad-feed');
+  if (!feed) return;
+  if (!cadCalls.length) {
+    feed.innerHTML = '<div class="cad-empty">AWAITING CALLS...</div>';
+    return;
+  }
+  feed.innerHTML = cadCalls.map(c => `
+    <div class="cad-call pri-${c.pri}">
+      <div class="cad-call-top">
+        <span class="cad-pri cad-pri-${c.pri}">P${c.pri}</span>
+        <span class="cad-type">${c.code}</span>
+        <button class="cad-dismiss" onclick="dismissCAD('${c.uid}')">✕ DISMISS</button>
+      </div>
+      <div class="cad-addr">${c.desc}</div>
+      <div class="cad-addr" style="color:var(--text-dim);font-size:9px;">${c.loc}</div>
+      <div class="cad-meta">
+        <span>${c.ts}</span><span>|</span><span>${c.id}</span><span>|</span><span>${c.unit}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function dismissCAD(uid) {
+  cadCalls = cadCalls.filter(c => c.uid !== uid);
+  renderCADFeed();
+}
+
+function startAmbientCAD() {
+  if (cadTimer) return;
+  // First call in 8–15s so it feels prompt
+  cadTimer = setTimeout(function fireCad() {
+    generateAmbientCall();
+    const delay = 60000 + Math.random() * 60000;
+    cadTimer = setTimeout(fireCad, delay);
+  }, 8000 + Math.random() * 7000);
+}
+
+function stopAmbientCAD() {
+  clearTimeout(cadTimer);
+  cadTimer = null;
+  cadCalls = [];
+  renderCADFeed();
+}
 
 // ── BOLO TICKER ───────────────────────────────
 const BOLOS = [
@@ -3180,6 +3613,28 @@ function formatAge(ts) {
   const hrs = Math.floor(mins / 60);
   return hrs + ' HR' + (hrs>1?'S':'') + ' AGO';
 }
+
+// ── PAGE INIT — runs last, after all declarations ──
+(function() {
+  const now = new Date();
+  const di = document.getElementById('inc-date');
+  const ti = document.getElementById('inc-time');
+  if (di) di.value = now.toISOString().slice(0,10);
+  if (ti) ti.value = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+
+  const savedName = sessionStorage.getItem('mdt_officer_name');
+  const savedCs   = sessionStorage.getItem('mdt_callsign');
+  const savedAg   = sessionStorage.getItem('mdt_agency') || 'PD';
+
+  if (savedName && savedCs) {
+    selectedAgency = savedAg;
+    document.getElementById('login-overlay').classList.add('hidden');
+    updateOfficerDisplays();
+    startAmbientCAD();
+  } else {
+    selectAgency('PD');
+  }
+})();
 </script>
 </body>
 </html>
